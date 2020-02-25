@@ -83,8 +83,8 @@ string LS(string &DNA1, string &DNA2, int x1, int x2, int y1, int y2) {
 
   string return_it;
   // Construct the LIS.
-  int l1 = x2;
-  int l2 = y2;
+  int l1 = x2 - 1;
+  int l2 = y2 - 1;
   while ((l1 != 0) && (l2 != 0)) {
     pair<int, int> t;
     t = from[l1][l2];
