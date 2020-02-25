@@ -83,8 +83,8 @@ string LS(string &DNA1, string &DNA2, int x1, int x2, int y1, int y2) {
 
   string return_it;
   // Construct the LIS.
-  int l1 = x2 - 1;
-  int l2 = y2 - 1;
+  int l1 = x2;
+  int l2 = y2;
   while ((l1 != 0) && (l2 != 0)) {
     pair<int, int> t;
     t = from[l1][l2];
@@ -98,9 +98,9 @@ string LS(string &DNA1, string &DNA2, int x1, int x2, int y1, int y2) {
   // assert(return_it.length() == LSQ[DNA1.length()][DNA2.length()]);
 
   if (x1 == 1) {
-    LS1 += return_it;
+    LS1 = return_it;
   } else {
-    LS2 += return_it;
+    LS2 = return_it;
   }
 }
 
