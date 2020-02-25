@@ -49,7 +49,7 @@ string read_string(istream &in) {
 string LS(string &DNA1, string &DNA2, const int &x1, const int &x2,
           const int &y1, const int &y2) {
   for (int i = x1; i < x2; i++) {
-    for (int j = x2; j < x2; j++) {
+    for (int j = y1; j < y2; j++) {
       if (DNA1[i - 1] == DNA2[j - 1]) {
         if (LSQ[i - 1][j - 1] + 1 > max(LSQ[i - 1][j], LSQ[i][j - 1])) {
           LSQ[i][j] = LSQ[i - 1][j - 1] + 1;
