@@ -21,7 +21,7 @@ using namespace std;
 
 string LS1 = "";
 string LS2 = "";
-string vector<vector<int>> LSQ;
+vector<vector<int>> LSQ;
 vector<vector<pair<int, int>>> from;
 
 string read_string(istream &in) {
