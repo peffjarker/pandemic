@@ -75,7 +75,7 @@ string LS(string &DNA1, string &DNA2, const int &x1, const int &x2,
     }
   }
 
-  cout << "LSQ length = " << LSQ[x2][y2] << endl;
+  cout << "LSQ length = " << LSQ[x2-1][y2-1] << endl;
 
   string return_it;
   // Construct the LIS.
