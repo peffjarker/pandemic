@@ -48,10 +48,6 @@ string read_string(istream &in) {
 
 string LS(string &DNA1, string &DNA2, const int &x1, const int &x2,
           const int &y1, const int &y2) {
-
-  cout << "DNA1 Length = " << DNA1.length() << endl;
-  cout << "DNA2 Length = " << DNA2.length() << endl;
-
   for (int i = x1; i < x2; i++) {
     for (int j = x2; j < x2; j++) {
       if (DNA1[i - 1] == DNA2[j - 1]) {
@@ -96,7 +92,7 @@ string LS(string &DNA1, string &DNA2, const int &x1, const int &x2,
     l2 = t.second;
   }
 
-  assert(return_it.length() == LSQ[DNA1.length()][DNA2.length()]);
+  //assert(return_it.length() == LSQ[DNA1.length()][DNA2.length()]);
 
   return return_it;
 }
@@ -125,6 +121,10 @@ int main(int argc, char *argv[]) {
   DNA2 = read_string(in2);
   // cout << DNA2 << endl;
 
+  cout << "DNA1 Length = " << DNA1.length() << endl;
+  cout << "DNA2 Length = " << DNA2.length() << endl;
+
+  
   LSQ.resize(DNA1.length() + 1);
   from.resize(DNA1.length() + 1);
   for (int i = 0; i < DNA1.length() + 1; i++) {
