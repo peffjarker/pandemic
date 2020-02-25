@@ -146,16 +146,16 @@ int main(int argc, char *argv[]) {
     from[i][0] = make_pair(-1, -1);
   }
 
-  thread th1(LS, ref(DNA1), ref(DNA2), 1, DNA1.length() / 2, 1,
-             DNA2.length() / 2);
+  thread th1(LS, ref(DNA1), ref(DNA2), 1, DNA1.length() + 1, 1,
+             DNA2.length() + 1);
 
-  thread th2(LS, ref(DNA1), ref(DNA2), DNA1.length() / 2, DNA1.length() + 1,
-             DNA2.length() / 2, DNA2.length() + 1);
+  // thread th2(LS, ref(DNA1), ref(DNA2), DNA1.length() / 2, DNA1.length() + 1,
+  //           DNA2.length() / 2, DNA2.length() + 1);
 
   th1.join();
-  th2.join();
+  // th2.join();
 
-  LS1 += LS2;
+  // LS1 += LS2;
   cout << LS1 << endl;
   cout << "Similarity score 1 vs 2=" << LS1.length() / (DNA1.length() * 1.0)
        << endl;
