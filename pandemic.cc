@@ -23,6 +23,8 @@ string LS1 = "";
 string LS2 = "";
 vector<vector<int>> LSQ;
 vector<vector<pair<int, int>>> from;
+vector<vector<future<bool>>> ready;
+vector<vector<promise<bool>>> ready_p;
 
 string read_string(istream &in) {
   string temp;
@@ -50,10 +52,15 @@ string read_string(istream &in) {
 //
 //
 
-string LS(string &DNA1, string &DNA2, int x1, int x2, int y1, int y2) {
+void LS(string &DNA1, string &DNA2, int x1, int x2) {
+  int y2 = DNA2.length();
 
-  for (int i = x1; i < x2; i++) {
-    for (int j = y1; j < y2; j++) {
+  for (int i = x1; i < x2 + 1; i++) {
+    for (int j = 1; j < DNA2.length() + 1; j++) {
+      if (x1 != 0) {
+        bool go = ready[x1 - 1][j].get() && ready[x1][j - 1].get() &&
+                  ready[x1 - 1][j - 1].get();
+      }
       if (DNA1[i - 1] == DNA2[j - 1]) {
         if (LSQ[i - 1][j - 1] + 1 > max(LSQ[i - 1][j], LSQ[i][j - 1])) {
           LSQ[i][j] = LSQ[i - 1][j - 1] + 1;
@@ -76,15 +83,18 @@ string LS(string &DNA1, string &DNA2, int x1, int x2, int y1, int y2) {
           from[i][j] = make_pair(i, j - 1);
         }
       }
+      if (i < x2 - 1) {
+        ready_p[i][j].set_value(true);
+      }
     }
   }
 
-  cout << "LSQ length = " << LSQ[x2 - 1][y2 - 1] << endl;
+  cout << "LSQ length = " << LSQ[x2][y2] << endl;
 
   string return_it;
   // Construct the LIS.
-  int l1 = x2 - 1;
-  int l2 = y2 - 1;
+  int l1 = x2;
+  int l2 = y2;
   while ((l1 != 0) && (l2 != 0)) {
     pair<int, int> t;
     t = from[l1][l2];
@@ -146,17 +156,17 @@ int main(int argc, char *argv[]) {
     from[i][0] = make_pair(-1, -1);
   }
 
-  thread th1(LS, ref(DNA1), ref(DNA2), 1, DNA1.length() / 2, 1,
-             DNA2.length() / 2);
+  thread th1(LS, ref(DNA1), ref(DNA2), 1, DNA1.length() / 2);
 
-  thread th2(LS, ref(DNA1), ref(DNA2), DNA1.length() / 2 + 1, DNA1.length() + 1,
-             DNA2.length() / 2 + 1, DNA2.length() + 1);
+  thread th2(LS, ref(DNA1), ref(DNA2), DNA1.length() / 2 + 1,
+             DNA1.length() + 1);
 
   th1.join();
   th2.join();
 
   LS1 += LS2;
-  cout << LS1 << endl;
+  fstream out("output.txt");
+  out << LS1 << endl;
   cout << "Similarity score 1 vs 2=" << LS1.length() / (DNA1.length() * 1.0)
        << endl;
   cout << "Similarity score 2 vs 1=" << LS1.length() / (DNA2.length() * 1.0)
