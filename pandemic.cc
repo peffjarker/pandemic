@@ -52,8 +52,8 @@ string read_string(istream &in) {
 
 string LS(string &DNA1, string &DNA2, int x1, int x2, int y1, int y2) {
 
-  for (int i = x1; i < x2 + 1; i++) {
-    for (int j = y1; j < y2 + 1; j++) {
+  for (int i = x1; i < x2; i++) {
+    for (int j = y1; j < y2; j++) {
       if (DNA1[i - 1] == DNA2[j - 1]) {
         if (LSQ[i - 1][j - 1] + 1 > max(LSQ[i - 1][j], LSQ[i][j - 1])) {
           LSQ[i][j] = LSQ[i - 1][j - 1] + 1;
@@ -149,8 +149,8 @@ int main(int argc, char *argv[]) {
   thread th1(LS, ref(DNA1), ref(DNA2), 1, DNA1.length() / 2, 1,
              DNA2.length() / 2);
 
-  thread th2(LS, ref(DNA1), ref(DNA2), DNA1.length() / 2, DNA1.length(),
-             DNA2.length() / 2, DNA2.length());
+  thread th2(LS, ref(DNA1), ref(DNA2), DNA1.length() / 2, DNA1.length() + 1,
+             DNA2.length() / 2, DNA2.length() + 1);
 
   th1.join();
   th2.join();
