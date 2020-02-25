@@ -141,8 +141,8 @@ int main(int argc, char *argv[]) {
     from[i][0] = make_pair(-1, -1);
   }
 
-  thread th1(LS, ref(DNA1), ref(DNA2), 1, DNA1.length() / 2, 1,
-             DNA2.length() / 2);
+  thread th1(LS, ref(DNA1), ref(DNA2), 1, DNA1.length() / 2 - 1, 1,
+             DNA2.length() / 2 - 1);
 
   thread th2(LS, ref(DNA1), ref(DNA2), DNA1.length() / 2 + 1, DNA1.length(),
              DNA2.length() / 2 + 1, DNA2.length());
