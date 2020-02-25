@@ -158,8 +158,7 @@ int main(int argc, char *argv[]) {
 
   thread th1(LS, ref(DNA1), ref(DNA2), 1, DNA1.length() / 2);
 
-  thread th2(LS, ref(DNA1), ref(DNA2), DNA1.length() / 2 + 1,
-             DNA1.length() + 1);
+  thread th2(LS, ref(DNA1), ref(DNA2), DNA1.length() / 2 + 2, DNA1.length());
 
   th1.join();
   th2.join();
