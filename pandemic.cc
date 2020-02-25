@@ -13,10 +13,12 @@
 #include <cassert>
 #include <fstream>
 #include <sstream>
+#include <thread>
 #include <vector>
 
 using namespace std;
 
+string LS1 = "";
 vector<vector<int>> LSQ;
 vector<vector<pair<int, int>>> from;
 
@@ -94,7 +96,7 @@ string LS(string &DNA1, string &DNA2, const int &x1, const int &x2,
   }
   // assert(return_it.length() == LSQ[DNA1.length()][DNA2.length()]);
 
-  return return_it;
+  LS1 += return_it;
 }
 
 int main(int argc, char *argv[]) {
@@ -139,14 +141,14 @@ int main(int argc, char *argv[]) {
     from[i][0] = make_pair(-1, -1);
   }
 
-  string LS1, LS2, LS3;
-  LS1 = LS(DNA1, DNA2, 1, DNA1.length() / 2, 1, DNA1.length() / 2);
-  LS2 = LS(DNA1, DNA2, DNA1.length() / 2 + 1, DNA1.length(),
-           DNA2.length() / 2 + 1, DNA2.length());
-  LS3 = LS1 + LS2;
-  cout << LS3 << endl;
-  cout << "Similarity score 1 vs 2=" << LS3.length() / (DNA1.length() * 1.0)
+  thread thread_one(LS, DNA1, DNA2, 1, DNA1.length() / 2, 1, DNA2.length() / 2);
+  thread thread_two(LS, DNA1, DNA2, DNA1.length() / 2 + 1, DNA1.length(),
+                    DNA2.length() / 2 + 1, DNA2.length());
+  string LS1;
+
+  cout << LS1 << endl;
+  cout << "Similarity score 1 vs 2=" << LS1.length() / (DNA1.length() * 1.0)
        << endl;
-  cout << "Similarity score 2 vs 1=" << LS3.length() / (DNA2.length() * 1.0)
+  cout << "Similarity score 2 vs 1=" << LS1.length() / (DNA2.length() * 1.0)
        << endl;
 }
