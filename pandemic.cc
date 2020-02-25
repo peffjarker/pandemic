@@ -20,7 +20,8 @@
 using namespace std;
 
 string LS1 = "";
-vector<vector<int>> LSQ;
+string LS2 = "";
+string vector<vector<int>> LSQ;
 vector<vector<pair<int, int>>> from;
 
 string read_string(istream &in) {
@@ -96,7 +97,11 @@ string LS(string &DNA1, string &DNA2, int x1, int x2, int y1, int y2) {
   }
   // assert(return_it.length() == LSQ[DNA1.length()][DNA2.length()]);
 
-  LS1 += return_it;
+  if (x1 == 1) {
+    LS1 += return_it;
+  } else {
+    LS2 += return_it;
+  }
 }
 
 int main(int argc, char *argv[]) {
@@ -150,6 +155,7 @@ int main(int argc, char *argv[]) {
   th1.join();
   th2.join();
 
+  LS1 += LS2;
   cout << LS1 << endl;
   cout << "Similarity score 1 vs 2=" << LS1.length() / (DNA1.length() * 1.0)
        << endl;
