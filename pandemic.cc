@@ -84,14 +84,13 @@ string LS(string &DNA1, string &DNA2, const int &x1, const int &x2,
   while ((l1 != 0) && (l2 != 0)) {
     pair<int, int> t;
     t = from[l1][l2];
-    if ((t.first == l1 - 1) && (t.second == l2 - 1)) {
-      assert(DNA1[l1 - 1] == DNA2[l2 - 1]);
-      return_it.insert(0, 1, DNA1[l1 - 1]);
+    if ((t.first == x2 - 1) && (t.second == y2 - 1)) {
+      assert(DNA1[x2 - 1] == DNA2[y2 - 1]);
+      return_it.insert(0, 1, DNA1[x2 - 1]);
     }
     l1 = t.first;
     l2 = t.second;
   }
-
   //assert(return_it.length() == LSQ[DNA1.length()][DNA2.length()]);
 
   return return_it;
