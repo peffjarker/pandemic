@@ -7,11 +7,12 @@
 // sequences.
 //
 
-#include <iostream>
-
 #include <algorithm>
 #include <cassert>
 #include <fstream>
+#include <future>
+#include <iostream>
+#include <numeric>
 #include <sstream>
 #include <thread>
 #include <vector>
@@ -48,8 +49,7 @@ string read_string(istream &in) {
 //
 //
 
-string LS(string &DNA1, string &DNA2, const int &x1, const int &x2,
-          const int &y1, const int &y2) {
+string LS(string &DNA1, string &DNA2, int x1, int x2, int y1, int y2) {
 
   for (int i = x1; i < x2 + 1; i++) {
     for (int j = y1; j < y2 + 1; j++) {
@@ -141,10 +141,13 @@ int main(int argc, char *argv[]) {
     from[i][0] = make_pair(-1, -1);
   }
 
-  thread thread_one(LS, DNA1, DNA2, 1, DNA1.length() / 2, 1, DNA2.length() / 2);
-  thread thread_two(LS, DNA1, DNA2, DNA1.length() / 2 + 1, DNA1.length(),
-                    DNA2.length() / 2 + 1, DNA2.length());
-  string LS1;
+  future<void> ans1 = async(launch::async, [&] {
+    (LS, DNA1, DNA2, 1, DNA1.length() / 2, 1, DNA2.length() / 2);
+  });
+  future<void> ans2 = async(launch::async, [&] {
+    (LS, DNA1, DNA2, DNA1.length() / 2 + 1, DNA1.length(),
+     DNA2.length() / 2 + 1, DNA2.length());
+  });
 
   cout << LS1 << endl;
   cout << "Similarity score 1 vs 2=" << LS1.length() / (DNA1.length() * 1.0)
