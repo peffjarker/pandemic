@@ -141,13 +141,10 @@ int main(int argc, char *argv[]) {
     from[i][0] = make_pair(-1, -1);
   }
 
-  future<void> ans1 = async(launch::async, [&] {
-    (LS, DNA1, DNA2, 1, DNA1.length() / 2, 1, DNA2.length() / 2);
-  });
-  future<void> ans2 = async(launch::async, [&] {
-    (LS, DNA1, DNA2, DNA1.length() / 2 + 1, DNA1.length(),
-     DNA2.length() / 2 + 1, DNA2.length());
-  });
+  thread th1(LS, DNA1, DNA2, 1, DNA1.length() / 2, 1, DNA2.length() / 2);
+
+  thread th2(LS, DNA1, DNA2, DNA1.length() / 2 + 1, DNA1.length(),
+             DNA2.length() / 2 + 1, DNA2.length());
 
   cout << LS1 << endl;
   cout << "Similarity score 1 vs 2=" << LS1.length() / (DNA1.length() * 1.0)
