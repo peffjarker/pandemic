@@ -75,7 +75,7 @@ string LS(string &DNA1, string &DNA2, const int &x1, const int &x2,
     }
   }
 
-  cout << "LSQ length = " << LSQ[x2-1][y2-1] << endl;
+  cout << "LSQ length = " << LSQ[x2 - 1][y2 - 1] << endl;
 
   string return_it;
   // Construct the LIS.
@@ -83,7 +83,7 @@ string LS(string &DNA1, string &DNA2, const int &x1, const int &x2,
   int l2 = DNA2.length();
   while ((l1 != 0) && (l2 != 0)) {
     pair<int, int> t;
-    t = from[l1][l2];
+    t = from[x2][y2];
     if ((t.first == x2 - 1) && (t.second == y2 - 1)) {
       assert(DNA1[x2 - 1] == DNA2[y2 - 1]);
       return_it.insert(0, 1, DNA1[x2 - 1]);
@@ -91,7 +91,7 @@ string LS(string &DNA1, string &DNA2, const int &x1, const int &x2,
     l1 = t.first;
     l2 = t.second;
   }
-  //assert(return_it.length() == LSQ[DNA1.length()][DNA2.length()]);
+  // assert(return_it.length() == LSQ[DNA1.length()][DNA2.length()]);
 
   return return_it;
 }
@@ -123,7 +123,6 @@ int main(int argc, char *argv[]) {
   cout << "DNA1 Length = " << DNA1.length() << endl;
   cout << "DNA2 Length = " << DNA2.length() << endl;
 
-  
   LSQ.resize(DNA1.length() + 1);
   from.resize(DNA1.length() + 1);
   for (int i = 0; i < DNA1.length() + 1; i++) {
