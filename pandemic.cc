@@ -48,8 +48,9 @@ string read_string(istream &in) {
 
 string LS(string &DNA1, string &DNA2, const int &x1, const int &x2,
           const int &y1, const int &y2) {
-  for (int i = x1; i < x2; i++) {
-    for (int j = y1; j < y2; j++) {
+
+  for (int i = x1; i < x2 + 1; i++) {
+    for (int j = y1; j < y2 + 1; j++) {
       if (DNA1[i - 1] == DNA2[j - 1]) {
         if (LSQ[i - 1][j - 1] + 1 > max(LSQ[i - 1][j], LSQ[i][j - 1])) {
           LSQ[i][j] = LSQ[i - 1][j - 1] + 1;
@@ -75,7 +76,7 @@ string LS(string &DNA1, string &DNA2, const int &x1, const int &x2,
     }
   }
 
-  cout << "LSQ length = " << LSQ[x1][y1] << endl;
+  cout << "LSQ length = " << LSQ[x2][y2] << endl;
 
   string return_it;
   // Construct the LIS.
@@ -139,9 +140,9 @@ int main(int argc, char *argv[]) {
   }
 
   string LS1, LS2, LS3;
-  LS1 = LS(DNA1, DNA2, 0, DNA1.length() / 2, 0, DNA1.length() / 2);
-  LS2 = LS(DNA1, DNA2, DNA1.length() / 2 + 1, DNA1.length() / 2 + 1,
-           DNA2.length() / 2 + 1, DNA2.length() / 2 + 1);
+  LS1 = LS(DNA1, DNA2, 1, DNA1.length() / 2, 1, DNA1.length() / 2);
+  LS2 = LS(DNA1, DNA2, DNA1.length() / 2 + 1, DNA1.length(),
+           DNA2.length() / 2 + 1, DNA2.length());
   LS3 = LS1 + LS2;
   cout << LS3 << endl;
   cout << "Similarity score 1 vs 2=" << LS3.length() / (DNA1.length() * 1.0)
