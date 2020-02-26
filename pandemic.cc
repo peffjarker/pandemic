@@ -167,6 +167,7 @@ int main(int argc, char *argv[]) {
     ready[i].resize(DNA2.length());
     ready_p[i].resize(DNA2.length());
     for (int j = 0; j < DNA2.length(); ++j) {
+      cout << i << ":" << j << endl;
       if (i == 0 || j == 0) {
         ready_p[i][j].set_value(true);
       } else {
