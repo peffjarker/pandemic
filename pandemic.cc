@@ -156,6 +156,7 @@ int main(int argc, char *argv[]) {
     LSQ[i][0] = 0;
     from[i][0] = make_pair(-1, -1);
   }
+  cout << "help" << endl;
 
   ready.resize(DNA1.length());
   ready_p.resize(DNA1.length());
