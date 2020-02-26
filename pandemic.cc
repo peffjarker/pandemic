@@ -148,14 +148,17 @@ int main(int argc, char *argv[]) {
     LSQ[i].resize(DNA2.length() + 1, 0);
     from[i].resize(DNA2.length() + 1);
   }
+  cout << "resize" << endl;
   for (int i = 0; i < DNA2.length() + 1; i++) {
     LSQ[0][i] = 0;
     from[0][i] = make_pair(-1, -1);
   }
+  cout << "first make pair" << endl;
   for (int i = 1; i < DNA1.length() + 1; i++) {
     LSQ[i][0] = 0;
     from[i][0] = make_pair(-1, -1);
   }
+
   cout << "help" << endl;
 
   ready.resize(DNA1.length());
