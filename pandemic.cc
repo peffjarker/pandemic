@@ -57,7 +57,7 @@ void LS(string &DNA1, string &DNA2, int x1, int x2) {
 
   for (int i = x1; i < x2 + 1; i++) {
     for (int j = 1; j < DNA2.length() + 1; j++) {
-      if (x1 != 0) {
+      if (x1 != 1) {
         bool go = ready[x1 - 1][j].get() && ready[x1][j - 1].get() &&
                   ready[x1 - 1][j - 1].get();
       }
