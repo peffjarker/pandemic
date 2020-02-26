@@ -168,6 +168,7 @@ int main(int argc, char *argv[]) {
     ready_p[i].resize(DNA2.length());
     for (int j = 0; j < DNA2.length(); ++j) {
       if (i == 0 || j == 0) {
+        ready[i][j] = ready_p[i][j].get_future();
         ready_p[i][j].set_value(true);
       } else {
         ready[i][j] = ready_p[i][j].get_future();
