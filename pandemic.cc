@@ -58,8 +58,8 @@ void LS(string &DNA1, string &DNA2, int x1, int x2) {
   for (int i = x1; i < x2 + 1; i++) {
     for (int j = 1; j < DNA2.length() + 1; j++) {
       if (x1 != 1) {
-        bool go = ready[x1 - 1][j].get() && ready[x1][j - 1].get() &&
-                  ready[x1 - 1][j - 1].get();
+        bool go = ready[i - 1][j].get() && ready[i][j - 1].get() &&
+                  ready[i - 1][j - 1].get();
       }
       if (DNA1[i - 1] == DNA2[j - 1]) {
         if (LSQ[i - 1][j - 1] + 1 > max(LSQ[i - 1][j], LSQ[i][j - 1])) {
