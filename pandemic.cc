@@ -57,7 +57,7 @@ void LS(string &DNA1, string &DNA2, int x1, int x2) {
 
   for (int i = x1; i < x2 + 1; i++) {
     for (int j = 1; j < DNA2.length() + 1; j++) {
-      if (x1 != 1) {
+      if (i != 1) {
         cout << "x1 != 1" << endl;
         bool go = ready[i - 1][j].get() && ready[i][j - 1].get() &&
                   ready[i - 1][j - 1].get();
@@ -168,7 +168,6 @@ int main(int argc, char *argv[]) {
     ready_p[i].resize(DNA2.length());
     for (int j = 0; j < DNA2.length(); ++j) {
       if (i == 0 || j == 0) {
-        ready[i][j] = ready_p[i][j].get_future();
         ready_p[i][j].set_value(true);
       } else {
         ready[i][j] = ready_p[i][j].get_future();
@@ -176,6 +175,7 @@ int main(int argc, char *argv[]) {
     }
   }
 
+  cout << "what the fuck" << endl;
   thread th1(LS, ref(DNA1), ref(DNA2), 1, DNA1.length() / 2);
   thread th2(LS, ref(DNA1), ref(DNA2), DNA1.length() / 2 + 1, DNA1.length());
 
