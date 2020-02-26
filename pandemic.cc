@@ -156,16 +156,25 @@ int main(int argc, char *argv[]) {
     from[i][0] = make_pair(-1, -1);
   }
 
-  thread th1(LS, ref(DNA1), ref(DNA2), 1, DNA1.length() / 2);
+  ready.resize(DNA1.length());
+  ready_p.resize(DNA1.length());
+  for (int i = 0; i < DNA1.length(); ++i) {
+    ready[i].resize(DNA2.length());
+    ready_p[i].resize(DNA2.length());
+    for (int j = 0; j < DNA2.length(); ++j) {
+      ready[i][j] = ready_p[i][j].get_future();
+    }
+  }
 
+  thread th1(LS, ref(DNA1), ref(DNA2), 1, DNA1.length() / 2);
   thread th2(LS, ref(DNA1), ref(DNA2), DNA1.length() / 2 + 2, DNA1.length());
 
   th1.join();
   th2.join();
 
   LS1 += LS2;
-  fstream out("output.txt");
-  out << LS1 << endl;
+  // fstream out("output.txt");
+  cout << LS1 << endl;
   cout << "Similarity score 1 vs 2=" << LS1.length() / (DNA1.length() * 1.0)
        << endl;
   cout << "Similarity score 2 vs 1=" << LS1.length() / (DNA2.length() * 1.0)
