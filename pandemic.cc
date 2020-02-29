@@ -53,7 +53,7 @@ string read_string(istream &in) {
 //
 //
 
-void LS(string &DNA1, string &DNA2) {
+string LS(string &DNA1, string &DNA2) {
 
   for (int i = 1; i < DNA1.length() + 1; i++) {
 #pragma omp parallel for
@@ -84,13 +84,13 @@ void LS(string &DNA1, string &DNA2) {
           from[i][j] = make_pair(i, j - 1);
         }
       }
-      if (i < x2 - 1) {
+      if (i < DNA1.length() - 1) {
         ready_p[i][j].set_value(true);
       }
     }
   }
 
-  cout << "LSQ length = " << LSQ[DNA1.length()][x2] << endl;
+  cout << "LSQ length = " << LSQ[DNA1.length()][DNA2.length()] << endl;
 
   string return_it;
   // Construct the LIS.
@@ -108,11 +108,7 @@ void LS(string &DNA1, string &DNA2) {
   }
   // assert(return_it.length() == LSQ[DNA1.length()][DNA2.length()]);
 
-  if (x1 == 1) {
-    LS1 = return_it;
-  } else {
-    LS2 = return_it;
-  }
+  return return_it;
 }
 
 int main(int argc, char *argv[]) {
@@ -177,6 +173,7 @@ int main(int argc, char *argv[]) {
   }
 
   LS(DNA1, DNA2);
+
   cout << "what the fuck" << endl;
 
   LS1 += LS2;
