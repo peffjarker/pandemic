@@ -171,12 +171,12 @@ int main(int argc, char *argv[]) {
   }
 
   future<string> th1 = async(LS, ref(DNA1), ref(DNA2), 1, DNA2.length() / 4);
-  future<string> th2 = async((LS, ref(DNA1), ref(DNA2), DNA2.length() / 4 + 1,
-             DNA2.length() / 2);
+  future<string> th2 =
+      async(LS, ref(DNA1), ref(DNA2), DNA2.length() / 4 + 1, DNA2.length() / 2);
   future<string> th3 = async(LS, ref(DNA1), ref(DNA2), DNA2.length() / 2 + 1,
-             3 * DNA2.length() / 4);
-  future<string> th4 = async(LS, ref(DNA1), ref(DNA2), 3 * DNA2.length() / 4 + 1,
-             DNA2.length() + 1);
+                             3 * DNA2.length() / 4);
+  future<string> th4 = async(LS, ref(DNA1), ref(DNA2),
+                             3 * DNA2.length() / 4 + 1, DNA2.length() + 1);
 
   LS1 += th1.get();
   LS1 += th2.get();
