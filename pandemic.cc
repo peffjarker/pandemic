@@ -54,9 +54,8 @@ string read_string(istream &in) {
 //
 
 string LS(string &DNA1, string &DNA2) {
-
-  for (int i = 1; i < DNA1.length() + 1; i++) {
 #pragma omp parallel for
+  for (int i = 1; i < DNA1.length() + 1; i++) {
     for (int j = 1; j < DNA2.length() + 1; j++) {
       if (i != 1) {
         bool go = ready[i - 1][j].get() && ready[i][j - 1].get() &&
