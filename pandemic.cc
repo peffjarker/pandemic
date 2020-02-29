@@ -21,7 +21,6 @@
 using namespace std;
 
 string LS1 = "";
-string LS2 = "";
 vector<vector<int>> LSQ;
 vector<vector<pair<int, int>>> from;
 vector<vector<future<bool>>> ready;
@@ -53,10 +52,10 @@ string read_string(istream &in) {
 //
 //
 
-string LS(string &DNA1, string &DNA2) {
-#pragma omp parallel for
-  for (int i = 1; i < DNA1.length() + 1; i++) {
-    for (int j = 1; j < DNA2.length() + 1; j++) {
+string LS(string &DNA1, string &DNA2, int y1, int y2) {
+
+  for (int i = 1; i < DNA1.length(); i++) {
+    for (int j = y1; j < y2; j++) {
       if (i != 1) {
         bool go = ready[i - 1][j].get() && ready[i][j - 1].get() &&
                   ready[i - 1][j - 1].get();
@@ -83,7 +82,7 @@ string LS(string &DNA1, string &DNA2) {
           from[i][j] = make_pair(i, j - 1);
         }
       }
-      if (i < DNA1.length() - 1) {
+      if (j < DNA2.length() - 1) {
         ready_p[i][j].set_value(true);
       }
     }
@@ -159,6 +158,7 @@ int main(int argc, char *argv[]) {
   ready.resize(DNA1.length());
   ready_p.resize(DNA1.length());
   for (int i = 0; i < DNA1.length(); ++i) {
+    cout << i;
     ready[i].resize(DNA2.length());
     ready_p[i].resize(DNA2.length());
     for (int j = 0; j < DNA2.length(); ++j) {
@@ -170,9 +170,18 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  LS1 = LS(DNA1, DNA2);
+  future<string> th1 = async(LS, ref(DNA1), ref(DNA2), 1, DNA2.length() / 4);
+  future<string> th2 = async((LS, ref(DNA1), ref(DNA2), DNA2.length() / 4 + 1,
+             DNA2.length() / 2);
+  future<string> th3 = async(LS, ref(DNA1), ref(DNA2), DNA2.length() / 2 + 1,
+             3 * DNA2.length() / 4);
+  future<string> th4 = async(LS, ref(DNA1), ref(DNA2), 3 * DNA2.length() / 4 + 1,
+             DNA2.length() + 1);
 
-  cout << "what the fuck" << endl;
+  LS1 += th1.get();
+  LS1 += th2.get();
+  LS1 += th3.get();
+  LS1 += th4.get();
 
   cout << LS1 << endl;
   cout << "Similarity score 1 vs 2=" << LS1.length() / (DNA1.length() * 1.0)
