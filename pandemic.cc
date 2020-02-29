@@ -7,6 +7,7 @@
 // sequences.
 //
 
+#include "omp.h"
 #include <algorithm>
 #include <cassert>
 #include <fstream>
@@ -52,13 +53,12 @@ string read_string(istream &in) {
 //
 //
 
-void LS(string &DNA1, string &DNA2, int x1, int x2) {
-  int y2 = DNA2.length();
+void LS(string &DNA1, string &DNA2) {
 
-  for (int i = x1; i < x2 + 1; i++) {
+  for (int i = 1; i < DNA1.length() + 1; i++) {
+#pragma omp parallel for
     for (int j = 1; j < DNA2.length() + 1; j++) {
       if (i != 1) {
-        cout << "x1 != 1" << endl;
         bool go = ready[i - 1][j].get() && ready[i][j - 1].get() &&
                   ready[i - 1][j - 1].get();
       }
@@ -90,12 +90,12 @@ void LS(string &DNA1, string &DNA2, int x1, int x2) {
     }
   }
 
-  cout << "LSQ length = " << LSQ[x2][y2] << endl;
+  cout << "LSQ length = " << LSQ[DNA1.length()][x2] << endl;
 
   string return_it;
   // Construct the LIS.
-  int l1 = x2;
-  int l2 = y2;
+  int l1 = DNA1.length();
+  int l2 = DNA2.length();
   while ((l1 != 0) && (l2 != 0)) {
     pair<int, int> t;
     t = from[l1][l2];
@@ -164,6 +164,7 @@ int main(int argc, char *argv[]) {
   ready.resize(DNA1.length());
   ready_p.resize(DNA1.length());
   for (int i = 0; i < DNA1.length(); ++i) {
+    cout << i << endl;
     ready[i].resize(DNA2.length());
     ready_p[i].resize(DNA2.length());
     for (int j = 0; j < DNA2.length(); ++j) {
@@ -175,12 +176,8 @@ int main(int argc, char *argv[]) {
     }
   }
 
+  LS(DNA1, DNA2);
   cout << "what the fuck" << endl;
-  thread th1(LS, ref(DNA1), ref(DNA2), 1, DNA1.length() / 2);
-  thread th2(LS, ref(DNA1), ref(DNA2), DNA1.length() / 2 + 1, DNA1.length());
-
-  th1.join();
-  th2.join();
 
   LS1 += LS2;
   // fstream out("output.txt");
