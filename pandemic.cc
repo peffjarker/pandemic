@@ -84,7 +84,8 @@ void LS(string &DNA1, string &DNA2, int x1, int x2) {
           from[i][j] = make_pair(i, j - 1);
         }
       }
-      ready_p[i][j].set_value(true);
+      if (i < DNA1.length() && j < DNA2.length())
+        ready_p[i][j].set_value(true);
     }
   }
 }
@@ -129,10 +130,10 @@ int main(int argc, char *argv[]) {
 
   ready.resize(DNA1.length());
   ready_p.resize(DNA1.length());
-  for (int i = 1; i <= DNA1.length(); ++i) {
+  for (int i = 1; i < DNA1.length(); ++i) {
     ready[i].resize(DNA2.length());
     ready_p[i].resize(DNA2.length());
-    for (int j = 1; j <= DNA2.length(); ++j) {
+    for (int j = 1; j < DNA2.length(); ++j) {
       ready[i][j] = ready_p[i][j].get_future();
     }
   }
