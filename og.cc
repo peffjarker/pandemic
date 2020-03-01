@@ -57,8 +57,7 @@ string LS(string &DNA1, string &DNA2) {
   for (u_int i = 1; i < DNA1.length() + 1; i++) {
     for (u_int j = 1; j < DNA2.length() + 1; j++) {
       if (i != 1) {
-        bool go = ready[i - 1][j].get() && ready[i - 1][j - 1].get() &&
-                  ready[i][j - 1].get();
+        bool go = ready[i - 1][j].get();
       }
       if (DNA1[i - 1] == DNA2[j - 1]) {
         if (LSQ[i - 1][j - 1] + 1 > max(LSQ[i - 1][j], LSQ[i][j - 1])) {
