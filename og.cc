@@ -85,28 +85,27 @@ string LS(string &DNA1, string &DNA2) {
       ready_p[i][j].set_value(true);
     }
   }
-}
 
-cout << "LSQ length = " << LSQ[DNA1.length()][DNA2.length()] << endl;
+  cout << "LSQ length = " << LSQ[DNA1.length()][DNA2.length()] << endl;
 
-string return_it;
-// Construct the LIS.
-int l1 = DNA1.length();
-int l2 = DNA2.length();
-while ((l1 != 0) && (l2 != 0)) {
-  pair<int, int> t;
-  t = from[l1][l2];
-  if ((t.first == l1 - 1) && (t.second == l2 - 1)) {
-    assert(DNA1[l1 - 1] == DNA2[l2 - 1]);
-    return_it.insert(0, 1, DNA1[l1 - 1]);
+  string return_it;
+  // Construct the LIS.
+  int l1 = DNA1.length();
+  int l2 = DNA2.length();
+  while ((l1 != 0) && (l2 != 0)) {
+    pair<int, int> t;
+    t = from[l1][l2];
+    if ((t.first == l1 - 1) && (t.second == l2 - 1)) {
+      assert(DNA1[l1 - 1] == DNA2[l2 - 1]);
+      return_it.insert(0, 1, DNA1[l1 - 1]);
+    }
+    l1 = t.first;
+    l2 = t.second;
   }
-  l1 = t.first;
-  l2 = t.second;
-}
 
-assert(return_it.length() == LSQ[DNA1.length()][DNA2.length()]);
+  assert(return_it.length() == LSQ[DNA1.length()][DNA2.length()]);
 
-return return_it;
+  return return_it;
 }
 
 int main(int argc, char *argv[]) {
@@ -152,8 +151,9 @@ int main(int argc, char *argv[]) {
   for (u_int i = 0; i < DNA1.length() + 1; ++i) {
     ready[i].resize(DNA2.length());
     ready_p[i].resize(DNA2.length());
-    for (u_int j = 0; j < DNA2.length() + 1; ++j) {
-      ready[i][j] = ready_p[i][j].get_future();
+    for (u_int j = 1; j < DNA2.length() + 1; ++j) {
+      if (i > 0)
+        ready[i][j] = ready_p[i][j].get_future();
     }
   }
 
