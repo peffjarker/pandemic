@@ -54,35 +54,22 @@ string LS(string &DNA1, string &DNA2) {
   cout << "DNA1 Length = " << DNA1.length() << endl;
   cout << "DNA2 Length = " << DNA2.length() << endl;
 
-  for (u_int i = 1; i < DNA1.length() + 1; i++) {
-    for (u_int j = 1; j < DNA2.length() + 1; j++) {
-      if (i != 1) {
-        bool go = ready[i][j - 1].get();
-      }
-      if (DNA1[i - 1] == DNA2[j - 1]) {
-        if (LSQ[i - 1][j - 1] + 1 > max(LSQ[i - 1][j], LSQ[i][j - 1])) {
-          LSQ[i][j] = LSQ[i - 1][j - 1] + 1;
-          from[i][j] = make_pair(i - 1, j - 1);
-        } else {
-          if (LSQ[i - 1][j] > LSQ[i][j - 1]) {
-            LSQ[i][j] = LSQ[i - 1][j];
-            from[i][j] = make_pair(i - 1, j);
-          } else {
-            LSQ[i][j] = LSQ[i][j - 1];
-            from[i][j] = make_pair(i, j - 1);
-          }
-        }
-      } else {
-        if (LSQ[i - 1][j] > LSQ[i][j - 1]) {
-          LSQ[i][j] = LSQ[i - 1][j];
-          from[i][j] = make_pair(i - 1, j);
-        } else {
-          LSQ[i][j] = LSQ[i][j - 1];
-          from[i][j] = make_pair(i, j - 1);
-        }
-      }
-      ready_p[i][j].set_value(true);
+  for (int i = 0, j = 0; i <= DNA1.length() && j <= DNA2.length(); j++) {
+    int sz = min(j, (int)DNA1.length() - 1);
+#pragma omp parallel for
+    for (int k = 0; k <= sz; k++) {
+      int ii = i + k, jj = j - k;
+      if (ii == 0 || jj == 0)
+        LSQ[ii][jj] = 0;
+
+      else if (DNA1[ii - 1] == DNA2[jj - 1])
+        LSQ[ii][jj] = LSQ[ii - 1][jj - 1] + 1;
+
+      else
+        LSQ[ii][jj] = max(LSQ[ii - 1][jj], LSQ[ii][jj - 1]);
     }
+    if (j >= DNA2.length())
+      j = DNA2.length() - 1, i++;
   }
 
   cout << "LSQ length = " << LSQ[DNA1.length()][DNA2.length()] << endl;
