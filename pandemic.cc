@@ -9,6 +9,7 @@
 
 #include <iostream>
 
+#include "omp.h"
 #include <algorithm>
 #include <cassert>
 #include <fstream>
@@ -46,12 +47,12 @@ string read_string(istream &in) {
 //
 //
 
-string LS(string &DNA1, string &DNA2) {
+string LS(string &DNA1, string &DNA2, int x1, int x2) {
 
   cout << "DNA1 Length = " << DNA1.length() << endl;
   cout << "DNA2 Length = " << DNA2.length() << endl;
 
-  for (int i = 1; i < DNA1.length() + 1; i++) {
+  for (int i = x1; i < x2; i++) {
     for (int j = 1; j < DNA2.length() + 1; j++) {
       if (DNA1[i - 1] == DNA2[j - 1]) {
         if (LSQ[i - 1][j - 1] + 1 > max(LSQ[i - 1][j], LSQ[i][j - 1])) {
@@ -139,7 +140,10 @@ int main(int argc, char *argv[]) {
   }
 
   string LS1;
-  LS1 = LS(DNA1, DNA2);
+  string LS2;
+  LS1 = LS(DNA1, DNA2, 1, DNA1.length() / 2);
+  LS2 = LS(DNA1, DNA2, DNA1.length() / 2 + 1, DNA1.length());
+  LS1 += LS2;
   cout << LS1 << endl;
   cout << "Similarity score 1 vs 2=" << LS1.length() / (DNA1.length() * 1.0)
        << endl;
