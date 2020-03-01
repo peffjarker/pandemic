@@ -56,7 +56,7 @@ void LS(string &DNA1, string &DNA2, int x1, int x2) {
   int end = x2;
 
   for (int i = 1; i <= DNA1.length(); i++) {
-#pragma omp parallel for (static)
+#pragma omp parallel for
     for (int j = start; j <= end; j++) {
       if (i != 1) {
         bool go = ready[i - 1][j - 1].get() && ready[i - 1][j].get() &&
