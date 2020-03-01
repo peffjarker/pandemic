@@ -150,10 +150,10 @@ int main(int argc, char *argv[]) {
 
   ready.resize(DNA1.length());
   ready_p.resize(DNA1.length());
-  for (u_int i = 1; i < DNA1.length(); ++i) {
+  for (u_int i = 1; i < DNA1.length() + 1; ++i) {
     ready[i].resize(DNA2.length());
     ready_p[i].resize(DNA2.length());
-    for (u_int j = 1; j < DNA2.length(); ++j) {
+    for (u_int j = 1; j < DNA2.length() + 1; ++j) {
       ready[i][j] = ready_p[i][j].get_future();
     }
   }
