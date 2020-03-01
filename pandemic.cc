@@ -54,7 +54,7 @@ void LS(string &DNA1, string &DNA2, int x1, int x2) {
 
   int start = x1;
   int end = x2;
-#pragma omp parallel for
+#pragma omp parallel
   {
     for (int i = 1; i <= DNA1.length(); i++) {
 #pragma omp for
