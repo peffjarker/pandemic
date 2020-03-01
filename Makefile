@@ -1,4 +1,4 @@
 all: build
 
 build: pandemic.cc
-	g++ -g pandemic.cc -pthread -o p
+	g++ -Wall -Wextra -g pandemic.cc -pthread -o p
