@@ -176,9 +176,9 @@ int main(int argc, char *argv[]) {
   //                     3 * DNA2.length() / 4 + 1, DNA2.length() + 1);
 
   LS1 += th1.get();
-  LS1 += th2.get();
-  LS1 += th3.get();
-  LS1 += th4.get();
+  //LS1 += th2.get();
+  //LS1 += th3.get();
+  //LS1 += th4.get();
 
   cout << LS1 << endl;
   cout << "Similarity score 1 vs 2=" << LS1.length() / (DNA1.length() * 1.0)
