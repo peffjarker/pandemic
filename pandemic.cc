@@ -9,11 +9,11 @@
 
 #include <iostream>
 
-#include "omp.h"
 #include <algorithm>
 #include <cassert>
 #include <fstream>
 #include <future>
+#include <omp.h>
 #include <sstream>
 #include <vector>
 
@@ -54,27 +54,18 @@ void LS(string &DNA1, string &DNA2, int x1, int x2) {
 
   int start = x1;
   int end = x2;
-#pragma omp parallel
-  {
-    for (int i = 1; i <= DNA1.length(); i++) {
-#pragma omp for
-      for (int j = start; j <= end; j++) {
-        if (i != 1) {
-          bool go = ready[i - 1][j].get();
-        }
-        if (DNA1[i - 1] == DNA2[j - 1]) {
-          if (LSQ[i - 1][j - 1] + 1 > max(LSQ[i - 1][j], LSQ[i][j - 1])) {
-            LSQ[i][j] = LSQ[i - 1][j - 1] + 1;
-            from[i][j] = make_pair(i - 1, j - 1);
-          } else {
-            if (LSQ[i - 1][j] > LSQ[i][j - 1]) {
-              LSQ[i][j] = LSQ[i - 1][j];
-              from[i][j] = make_pair(i - 1, j);
-            } else {
-              LSQ[i][j] = LSQ[i][j - 1];
-              from[i][j] = make_pair(i, j - 1);
-            }
-          }
+  for (int i = 1; i <= DNA1.length(); i++) {
+#pragma omp parallel for
+    for (int j = start; j <= end; j++) {
+      if (i != 1) {
+        bool go = ready[i - 1][j].get() && ready[i - 1][j - 1].get() &&
+                  ready[i][j - 1].get();
+      }
+
+      if (DNA1[i - 1] == DNA2[j - 1]) {
+        if (LSQ[i - 1][j - 1] + 1 > max(LSQ[i - 1][j], LSQ[i][j - 1])) {
+          LSQ[i][j] = LSQ[i - 1][j - 1] + 1;
+          from[i][j] = make_pair(i - 1, j - 1);
         } else {
           if (LSQ[i - 1][j] > LSQ[i][j - 1]) {
             LSQ[i][j] = LSQ[i - 1][j];
@@ -84,9 +75,18 @@ void LS(string &DNA1, string &DNA2, int x1, int x2) {
             from[i][j] = make_pair(i, j - 1);
           }
         }
-        if (i < DNA1.length() && j < DNA2.length())
-          ready_p[i][j].set_value(true);
+      } else {
+        if (LSQ[i - 1][j] > LSQ[i][j - 1]) {
+          LSQ[i][j] = LSQ[i - 1][j];
+          from[i][j] = make_pair(i - 1, j);
+        } else {
+          LSQ[i][j] = LSQ[i][j - 1];
+          from[i][j] = make_pair(i, j - 1);
+        }
       }
+
+      if (i < DNA1.length() && j < DNA2.length())
+        ready_p[i][j].set_value(true);
     }
   }
 }
