@@ -12,6 +12,8 @@
 #include <algorithm>
 #include <cassert>
 #include <fstream>
+#include <future>
+#include <promise>
 #include <sstream>
 #include <vector>
 
@@ -19,6 +21,8 @@ using namespace std;
 
 vector<vector<int>> LSQ;
 vector<vector<pair<int, int>>> from;
+vector<vector<future<bool>>> ready;
+vector<vector<promise<bool>>> ready_p;
 
 string read_string(istream &in) {
   string temp;
@@ -51,8 +55,12 @@ string LS(string &DNA1, string &DNA2) {
   cout << "DNA1 Length = " << DNA1.length() << endl;
   cout << "DNA2 Length = " << DNA2.length() << endl;
 
-  for (int i = 1; i < DNA1.length() + 1; i++) {
-    for (int j = 1; j < DNA2.length() + 1; j++) {
+  for (u_int i = 1; i < DNA1.length() + 1; i++) {
+    for (u_int j = 1; j < DNA2.length() + 1; j++) {
+      if (i != 1) {
+        bool go = ready[i - 1][j - 1].get() && ready[i - 1][j].get() &&
+                  ready[i][j - 1].get();
+      }
       if (DNA1[i - 1] == DNA2[j - 1]) {
         if (LSQ[i - 1][j - 1] + 1 > max(LSQ[i - 1][j], LSQ[i][j - 1])) {
           LSQ[i][j] = LSQ[i - 1][j - 1] + 1;
@@ -74,6 +82,9 @@ string LS(string &DNA1, string &DNA2) {
           LSQ[i][j] = LSQ[i][j - 1];
           from[i][j] = make_pair(i, j - 1);
         }
+      }
+      if (j < DNA2.length() + 1) {
+        ready_p[i][j].set_value(true);
       }
     }
   }
@@ -125,17 +136,28 @@ int main(int argc, char *argv[]) {
 
   LSQ.resize(DNA1.length() + 1);
   from.resize(DNA1.length() + 1);
-  for (int i = 0; i < DNA1.length() + 1; i++) {
+  for (u_int i = 0; i < DNA1.length() + 1; i++) {
     LSQ[i].resize(DNA2.length() + 1, 0);
     from[i].resize(DNA2.length() + 1);
   }
-  for (int i = 0; i < DNA2.length() + 1; i++) {
+  for (u_int i = 0; i < DNA2.length() + 1; i++) {
     LSQ[0][i] = 0;
     from[0][i] = make_pair(-1, -1);
   }
-  for (int i = 1; i < DNA1.length() + 1; i++) {
+  for (u_int i = 1; i < DNA1.length() + 1; i++) {
     LSQ[i][0] = 0;
     from[i][0] = make_pair(-1, -1);
+  }
+
+  ready.resize(DNA1.length());
+  ready_p.resize(DNA1.length());
+  for (u_int i = 1; i < DNA1.length(); ++i) {
+    printf("%i\n", i);
+    ready[i].resize(DNA2.length());
+    ready_p[i].resize(DNA2.length());
+    for (u_int j = 1; j < DNA2.length(); ++j) {
+      ready[i][j] = ready_p[i][j].get_future();
+    }
   }
 
   string LS1;
