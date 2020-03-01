@@ -56,8 +56,9 @@ void LS(string &DNA1, string &DNA2, int x1, int x2) {
   int end = x2;
 
   for (int i = 1; i <= DNA1.length(); i++) {
+#pragma omp parallel for (static)
     for (int j = start; j <= end; j++) {
-      if (x1 != 1) {
+      if (i != 1) {
         bool go = ready[i - 1][j - 1].get() && ready[i - 1][j].get() &&
                   ready[i][j - 1].get();
       }
@@ -114,17 +115,14 @@ int main(int argc, char *argv[]) {
 
   LSQ.resize(DNA1.length() + 1);
   from.resize(DNA1.length() + 1);
-#pragma omp parallel for
   for (int i = 0; i < DNA1.length() + 1; i++) {
     LSQ[i].resize(DNA2.length() + 1, 0);
     from[i].resize(DNA2.length() + 1);
   }
-#pragma omp parallel for
   for (int i = 0; i < DNA2.length() + 1; i++) {
     LSQ[0][i] = 0;
     from[0][i] = make_pair(-1, -1);
   }
-#pragma omp parallel for
   for (int i = 1; i < DNA1.length() + 1; i++) {
     LSQ[i][0] = 0;
     from[i][0] = make_pair(-1, -1);
@@ -132,7 +130,6 @@ int main(int argc, char *argv[]) {
 
   ready.resize(DNA1.length());
   ready_p.resize(DNA1.length());
-#pragma omp parallel for
   for (int i = 1; i < DNA1.length(); ++i) {
     ready[i].resize(DNA2.length());
     ready_p[i].resize(DNA2.length());
@@ -144,17 +141,22 @@ int main(int argc, char *argv[]) {
   cout << "DNA1 Length = " << DNA1.length() << endl;
   cout << "DNA2 Length = " << DNA2.length() << endl;
 
-  thread t1(LS, ref(DNA1), ref(DNA2), 1, DNA2.length() / 4);
-  thread t2(LS, ref(DNA1), ref(DNA2), DNA2.length() / 4 + 1,
-            2 * DNA2.length() / 4);
-  thread t3(LS, ref(DNA1), ref(DNA2), 2 * DNA2.length() / 4 + 1,
-            3 * DNA2.length() / 4);
-  thread t4(LS, ref(DNA1), ref(DNA2), 3 * DNA2.length() / 4 + 1, DNA2.length());
+  /*
+    thread t1(LS, ref(DNA1), ref(DNA2), 1, DNA2.length() / 4);
+    thread t2(LS, ref(DNA1), ref(DNA2), DNA2.length() / 4 + 1,
+              2 * DNA2.length() / 4);
+    thread t3(LS, ref(DNA1), ref(DNA2), 2 * DNA2.length() / 4 + 1,
+              3 * DNA2.length() / 4);
+    thread t4(LS, ref(DNA1), ref(DNA2), 3 * DNA2.length() / 4 + 1,
+    DNA2.length());
 
-  t1.join();
-  t2.join();
-  t3.join();
-  t4.join();
+    t1.join();
+    t2.join();
+    t3.join();
+    t4.join();
+  */
+
+  LS(DNA1, DNA2, 1, DNA2.length());
 
   string return_it;
   // Construct the LIS.
