@@ -47,10 +47,7 @@ string read_string(istream &in) {
 //
 //
 
-string LS(string &DNA1, string &DNA2, int x1, int x2) {
-
-  cout << "DNA1 Length = " << DNA1.length() << endl;
-  cout << "DNA2 Length = " << DNA2.length() << endl;
+void LS(string &DNA1, string &DNA2, int x1, int x2) {
 
   int start = x1;
   int end = x2;
@@ -81,27 +78,6 @@ string LS(string &DNA1, string &DNA2, int x1, int x2) {
       }
     }
   }
-
-  cout << "LSQ length = " << LSQ[DNA1.length()][end] << endl;
-
-  string return_it;
-  // Construct the LIS.
-  int l1 = DNA1.length();
-  int l2 = x2;
-  while ((l1 != 0) && (l2 != 0)) {
-    pair<int, int> t;
-    t = from[l1][l2];
-    if ((t.first == l1 - 1) && (t.second == l2 - 1)) {
-      assert(DNA1[l1 - 1] == DNA2[l2 - 1]);
-      return_it.insert(0, 1, DNA1[l1 - 1]);
-    }
-    l1 = t.first;
-    l2 = t.second;
-  }
-
-  assert(return_it.length() == LSQ[DNA1.length()][x2]);
-
-  return return_it;
 }
 
 int main(int argc, char *argv[]) {
@@ -142,17 +118,34 @@ int main(int argc, char *argv[]) {
     from[i][0] = make_pair(-1, -1);
   }
 
-  string LS1;
-  string LS2;
-  string LS3;
-  string LS4;
-  LS1 = LS(DNA1, DNA2, 1, DNA2.length() / 4);
-  LS2 = LS(DNA1, DNA2, DNA2.length() / 4 + 1, 2 * DNA2.length() / 4);
-  LS3 = LS(DNA1, DNA2, 2 * DNA2.length() / 4 + 1, 3 * DNA2.length() / 4);
-  LS4 = LS(DNA1, DNA2, 3 * DNA2.length() / 4 + 1, DNA2.length());
-  cout << LS4 << endl;
-  cout << "Similarity score 1 vs 2=" << LS4.length() / (DNA1.length() * 1.0)
-       << endl;
-  cout << "Similarity score 2 vs 1=" << LS4.length() / (DNA2.length() * 1.0)
-       << endl;
+  cout << "DNA1 Length = " << DNA1.length() << endl;
+  cout << "DNA2 Length = " << DNA2.length() << endl;
+
+  LS(DNA1, DNA2, 1, DNA2.length() / 4);
+  LS(DNA1, DNA2, DNA2.length() / 4 + 1, 2 * DNA2.length() / 4);
+  LS(DNA1, DNA2, 2 * DNA2.length() / 4 + 1, 3 * DNA2.length() / 4);
+  LS(DNA1, DNA2, 3 * DNA2.length() / 4 + 1, DNA2.length());
+
+  string return_it;
+  // Construct the LIS.
+  int l1 = DNA1.length();
+  int l2 = DNA2.length();
+  while ((l1 != 0) && (l2 != 0)) {
+    pair<int, int> t;
+    t = from[l1][l2];
+    if ((t.first == l1 - 1) && (t.second == l2 - 1)) {
+      assert(DNA1[l1 - 1] == DNA2[l2 - 1]);
+      return_it.insert(0, 1, DNA1[l1 - 1]);
+    }
+    l1 = t.first;
+    l2 = t.second;
+  }
+
+  assert(return_it.length() == LSQ[DNA1.length()][DNA2.length()]);
+
+  cout << return_it << endl;
+  cout << "Similarity score 1 vs 2="
+       << return_it.length() / (DNA1.length() * 1.0) << endl;
+  cout << "Similarity score 2 vs 1="
+       << return_it.length() / (DNA2.length() * 1.0) << endl;
 }
