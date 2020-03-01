@@ -114,14 +114,17 @@ int main(int argc, char *argv[]) {
 
   LSQ.resize(DNA1.length() + 1);
   from.resize(DNA1.length() + 1);
+#pragma omp parallel for
   for (int i = 0; i < DNA1.length() + 1; i++) {
     LSQ[i].resize(DNA2.length() + 1, 0);
     from[i].resize(DNA2.length() + 1);
   }
+#pragma omp parallel for
   for (int i = 0; i < DNA2.length() + 1; i++) {
     LSQ[0][i] = 0;
     from[0][i] = make_pair(-1, -1);
   }
+#pragma omp parallel for
   for (int i = 1; i < DNA1.length() + 1; i++) {
     LSQ[i][0] = 0;
     from[i][0] = make_pair(-1, -1);
@@ -129,6 +132,7 @@ int main(int argc, char *argv[]) {
 
   ready.resize(DNA1.length());
   ready_p.resize(DNA1.length());
+#pragma omp parallel for
   for (int i = 1; i < DNA1.length(); ++i) {
     ready[i].resize(DNA2.length());
     ready_p[i].resize(DNA2.length());
