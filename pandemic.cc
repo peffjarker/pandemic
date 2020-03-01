@@ -146,10 +146,10 @@ int main(int argc, char *argv[]) {
   string LS2;
   LS1 = LS(DNA1, DNA2, 1, DNA2.length() / 2);
   LS2 = LS(DNA1, DNA2, DNA2.length() / 2 + 1, DNA2.length());
-  LS1 += LS2;
-  cout << LS1 << endl;
-  cout << "Similarity score 1 vs 2=" << LS1.length() / (DNA1.length() * 1.0)
+  cout << "LS1" << LS1.length() << endl;
+  cout << "LS2" << LS2.length() << endl;
+  cout << "Similarity score 1 vs 2=" << LS2.length() / (DNA1.length() * 1.0)
        << endl;
-  cout << "Similarity score 2 vs 1=" << LS1.length() / (DNA2.length() * 1.0)
+  cout << "Similarity score 2 vs 1=" << LS2.length() / (DNA2.length() * 1.0)
        << endl;
 }
