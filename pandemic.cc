@@ -79,11 +79,11 @@ string LS(string &DNA1, string &DNA2, int x1, int x2) {
     }
   }
 
-  cout << "LSQ length = " << LSQ[DNA1.length()][DNA2.length()] << endl;
+  cout << "LSQ length = " << LSQ[x2][DNA2.length()] << endl;
 
   string return_it;
   // Construct the LIS.
-  int l1 = DNA1.length();
+  int l1 = x2;
   int l2 = DNA2.length();
   while ((l1 != 0) && (l2 != 0)) {
     pair<int, int> t;
@@ -96,7 +96,7 @@ string LS(string &DNA1, string &DNA2, int x1, int x2) {
     l2 = t.second;
   }
 
-  assert(return_it.length() == LSQ[DNA1.length()][DNA2.length()]);
+  assert(return_it.length() == LSQ[x2][DNA2.length()]);
 
   return return_it;
 }
