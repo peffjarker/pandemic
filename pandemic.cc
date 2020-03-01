@@ -144,12 +144,15 @@ int main(int argc, char *argv[]) {
 
   string LS1;
   string LS2;
-  LS1 = LS(DNA1, DNA2, 1, DNA2.length() / 2);
-  LS2 = LS(DNA1, DNA2, DNA2.length() / 2 + 1, DNA2.length());
-  cout << "LS1" << LS1.length() << endl;
-  cout << "LS2" << LS2.length() << endl;
-  cout << "Similarity score 1 vs 2=" << LS2.length() / (DNA1.length() * 1.0)
+  string LS3;
+  string LS4;
+  LS1 = LS(DNA1, DNA2, 1, DNA2.length() / 4);
+  LS2 = LS(DNA1, DNA2, DNA2.length() / 4 + 1, 2 * DNA2.length() / 4);
+  LS3 = LS(DNA1, DNA2, 2 * DNA2.length() / 4 + 1, 3 * DNA2.length() / 4);
+  LS4 = LS(DNA1, DNA2, 3 * DNA2.length() / 4 + 1, DNA2.length());
+  cout << LS4 << endl;
+  cout << "Similarity score 1 vs 2=" << LS4.length() / (DNA1.length() * 1.0)
        << endl;
-  cout << "Similarity score 2 vs 1=" << LS2.length() / (DNA2.length() * 1.0)
+  cout << "Similarity score 2 vs 1=" << LS4.length() / (DNA2.length() * 1.0)
        << endl;
 }
