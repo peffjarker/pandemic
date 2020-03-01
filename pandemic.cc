@@ -56,6 +56,7 @@ void LS(string &DNA1, string &DNA2, int x1, int x2) {
   int end = x2;
 
   for (int i = 1; i <= DNA1.length(); i++) {
+#pragma omp parallel for
     for (int j = start; j <= end; j++) {
       if (x1 != 1) {
         bool go = ready[i - 1][j - 1].get() && ready[i - 1][j].get() &&
@@ -139,12 +140,15 @@ int main(int argc, char *argv[]) {
   cout << "DNA1 Length = " << DNA1.length() << endl;
   cout << "DNA2 Length = " << DNA2.length() << endl;
 
-  thread t1(LS, ref(DNA1), ref(DNA2), 1, DNA2.length() / 4);
+  /*thread t1(LS, ref(DNA1), ref(DNA2), 1, DNA2.length() / 4);
   thread t2(LS, ref(DNA1), ref(DNA2), DNA2.length() / 4 + 1,
             2 * DNA2.length() / 4);
   thread t3(LS, ref(DNA1), ref(DNA2), 2 * DNA2.length() / 4 + 1,
             3 * DNA2.length() / 4);
-  thread t4(LS, ref(DNA1), ref(DNA2), 3 * DNA2.length() / 4 + 1, DNA2.length());
+  thread t4(LS, ref(DNA1), ref(DNA2), 3 * DNA2.length() / 4 + 1,
+  DNA2.length());*/
+
+  LS(DNA1, DNA2, 1, DNA2.length());
 
   string return_it;
   // Construct the LIS.
