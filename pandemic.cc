@@ -116,6 +116,13 @@ int main(int argc, char *argv[]) {
     exit(-1);
   }
 
+  string DNA1;
+  DNA1 = read_string(in1);
+  // cout << DNA1 << endl;
+  string DNA2;
+  DNA2 = read_string(in2);
+  // cout << DNA2 << endl;
+
   LSQ.resize(DNA1.length() + 1);
   from.resize(DNA1.length() + 1);
   for (int i = 0; i < DNA1.length() + 1; i++) {
@@ -130,13 +137,6 @@ int main(int argc, char *argv[]) {
     LSQ[i][0] = 0;
     from[i][0] = make_pair(-1, -1);
   }
-
-  string DNA1;
-  DNA1 = read_string(in1);
-  // cout << DNA1 << endl;
-  string DNA2;
-  DNA2 = read_string(in2);
-  // cout << DNA2 << endl;
 
   string LS1;
   LS1 = LS(DNA1, DNA2);
