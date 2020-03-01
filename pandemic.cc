@@ -60,8 +60,7 @@ void LS(string &DNA1, string &DNA2, int x1, int x2) {
 #pragma omp for
       for (int j = start; j <= end; j++) {
         if (i != 1) {
-          bool go = ready[i - 1][j - 1].get() && ready[i - 1][j].get() &&
-                    ready[i][j - 1].get();
+          bool go = ready[i - 1][j].get();
         }
         if (DNA1[i - 1] == DNA2[j - 1]) {
           if (LSQ[i - 1][j - 1] + 1 > max(LSQ[i - 1][j], LSQ[i][j - 1])) {
