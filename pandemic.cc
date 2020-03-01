@@ -88,7 +88,7 @@ string LS(string &DNA1, string &DNA2, int y1, int y2) {
     }
   }
 
-  cout << "LSQ length = " << LSQ[DNA1.length()][DNA2.length()] << endl;
+  cout << "LSQ length = " << LSQ[DNA1.length()][y2] << endl;
 
   string return_it;
   // Construct the LIS.
@@ -158,6 +158,7 @@ int main(int argc, char *argv[]) {
   ready.resize(DNA1.length());
   ready_p.resize(DNA1.length());
   for (int i = 0; i < DNA1.length(); ++i) {
+    cout << i;
     ready[i].resize(DNA2.length());
     ready_p[i].resize(DNA2.length());
     for (int j = 0; j < DNA2.length(); ++j) {
