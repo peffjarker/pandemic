@@ -52,8 +52,11 @@ string LS(string &DNA1, string &DNA2, int x1, int x2) {
   cout << "DNA1 Length = " << DNA1.length() << endl;
   cout << "DNA2 Length = " << DNA2.length() << endl;
 
-  for (int i = x1; i < x2; i++) {
-    for (int j = 1; j < DNA2.length() + 1; j++) {
+  int start = x1;
+  int end = x2;
+
+  for (int i = 1; i <= DNA1.length(); i++) {
+    for (int j = start; j <= end; j++) {
       if (DNA1[i - 1] == DNA2[j - 1]) {
         if (LSQ[i - 1][j - 1] + 1 > max(LSQ[i - 1][j], LSQ[i][j - 1])) {
           LSQ[i][j] = LSQ[i - 1][j - 1] + 1;
@@ -79,12 +82,12 @@ string LS(string &DNA1, string &DNA2, int x1, int x2) {
     }
   }
 
-  cout << "LSQ length = " << LSQ[x2][DNA2.length()] << endl;
+  cout << "LSQ length = " << LSQ[DNA1.length()][end] << endl;
 
   string return_it;
   // Construct the LIS.
-  int l1 = x2;
-  int l2 = DNA2.length();
+  int l1 = DNA1.length();
+  int l2 = x2;
   while ((l1 != 0) && (l2 != 0)) {
     pair<int, int> t;
     t = from[l1][l2];
@@ -96,7 +99,7 @@ string LS(string &DNA1, string &DNA2, int x1, int x2) {
     l2 = t.second;
   }
 
-  assert(return_it.length() == LSQ[x2][DNA2.length()]);
+  assert(return_it.length() == LSQ[DNA1.length()][x2]);
 
   return return_it;
 }
@@ -141,8 +144,8 @@ int main(int argc, char *argv[]) {
 
   string LS1;
   string LS2;
-  LS1 = LS(DNA1, DNA2, 1, DNA1.length() / 2);
-  LS2 = LS(DNA1, DNA2, DNA1.length() / 2 + 1, DNA1.length());
+  LS1 = LS(DNA1, DNA2, 1, DNA2.length() / 2);
+  LS2 = LS(DNA1, DNA2, DNA2.length() / 2 + 1, DNA2.length());
   LS1 += LS2;
   cout << LS1 << endl;
   cout << "Similarity score 1 vs 2=" << LS1.length() / (DNA1.length() * 1.0)
