@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <cassert>
 #include <fstream>
+#include <future>
 #include <sstream>
 #include <vector>
 
@@ -20,6 +21,8 @@ using namespace std;
 
 vector<vector<int>> LSQ;
 vector<vector<pair<int, int>>> from;
+vector<vector<future<bool>>> ready;
+vector<vector<promise<bool>>> ready_p;
 
 string read_string(istream &in) {
   string temp;
@@ -54,6 +57,10 @@ void LS(string &DNA1, string &DNA2, int x1, int x2) {
 
   for (int i = 1; i <= DNA1.length(); i++) {
     for (int j = start; j <= end; j++) {
+      if (x1 != 1) {
+        bool go = ready[i - 1][j - 1].get() && ready[i - 1][j].get() &&
+                  ready[i][j - 1].get();
+      }
       if (DNA1[i - 1] == DNA2[j - 1]) {
         if (LSQ[i - 1][j - 1] + 1 > max(LSQ[i - 1][j], LSQ[i][j - 1])) {
           LSQ[i][j] = LSQ[i - 1][j - 1] + 1;
@@ -76,6 +83,7 @@ void LS(string &DNA1, string &DNA2, int x1, int x2) {
           from[i][j] = make_pair(i, j - 1);
         }
       }
+      ready_p[i][j].set_value(true);
     }
   }
 }
@@ -118,13 +126,25 @@ int main(int argc, char *argv[]) {
     from[i][0] = make_pair(-1, -1);
   }
 
+  ready.resize(DNA1.length());
+  ready_p.resize(DNA1.length());
+  for (int i = 1; i <= DNA1.length(); ++i) {
+    ready[i].resize(DNA2.length());
+    ready_p[i].resize(DNA2.length());
+    for (int j = 0; j < DNA2.length(); ++j) {
+      ready[i][j] = ready_p[i][j].get_future();
+    }
+  }
+
   cout << "DNA1 Length = " << DNA1.length() << endl;
   cout << "DNA2 Length = " << DNA2.length() << endl;
 
-  LS(DNA1, DNA2, 1, DNA2.length() / 4);
-  LS(DNA1, DNA2, DNA2.length() / 4 + 1, 2 * DNA2.length() / 4);
-  LS(DNA1, DNA2, 2 * DNA2.length() / 4 + 1, 3 * DNA2.length() / 4);
-  LS(DNA1, DNA2, 3 * DNA2.length() / 4 + 1, DNA2.length());
+  thread t1(LS, ref(DNA1), ref(DNA2), 1, DNA2.length() / 4);
+  thread t2(LS, ref(DNA1), ref(DNA2), DNA2.length() / 4 + 1,
+            2 * DNA2.length() / 4);
+  thread t3(LS, ref(DNA1), ref(DNA2), 2 * DNA2.length() / 4 + 1,
+            3 * DNA2.length() / 4);
+  thread t4(LS, ref(DNA1), ref(DNA2), 3 * DNA2.length() / 4 + 1, DNA2.length());
 
   string return_it;
   // Construct the LIS.
