@@ -13,7 +13,6 @@
 #include <cassert>
 #include <fstream>
 #include <future>
-#include <promise>
 #include <sstream>
 #include <vector>
 
