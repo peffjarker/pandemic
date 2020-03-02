@@ -52,14 +52,14 @@ string read_string(istream &in) {
 
 void LS(string &DNA1, string &DNA2, int i, int n) {
 
-  int start = max(1, (i * DNA2.length() / n));
+  int start = max(1, (i * (int)DNA2.length() / n));
   int end = min(((i + 1) * DNA2.length()) / n, DNA2.length());
-  for (int i = 1; i <= DNA1.length(); i++) {
+
+  for (int l = 1; i <= DNA1.length(); i++) {
+    if (i != 0) {
+      bool go = ready[i-1][l].get();
+    }
     for (int j = start; j <= end; j++) {
-      if (i != 0) {
-        bool go = ready[i - 1][j].get() && ready[i - 1][j - 1].get() &&
-                  ready[i][j - 1].get();
-      }
       if (DNA1[i - 1] == DNA2[j - 1]) {
         if (LSQ[i - 1][j - 1] + 1 > max(LSQ[i - 1][j], LSQ[i][j - 1])) {
           LSQ[i][j] = LSQ[i - 1][j - 1] + 1;
@@ -82,13 +82,15 @@ void LS(string &DNA1, string &DNA2, int i, int n) {
           from[i][j] = make_pair(i, j - 1);
         }
       }
+      if (i < n - 1) {
+        ready_p[i][l].set_value(true);
+      }
     }
 
-    if (i < n - 1) {
-      ready_p[i][j].set_value(true);
-    }
   }
+
 }
+
 
 int main(int argc, char *argv[]) {
   assert(argc == 3); // Fail if this isn't true.
@@ -128,13 +130,14 @@ int main(int argc, char *argv[]) {
     from[i][0] = make_pair(-1, -1);
   }
 
-  ready.resize(DNA1.length());
-  ready_p.resize(DNA1.length());
-  for (int i = 1; i < DNA1.length(); ++i) {
+  ready.resize(3);
+  ready_p.resize(3);
+  for (int i = 0; i < 3; ++i) {
     ready[i].resize(DNA2.length());
     ready_p[i].resize(DNA2.length());
     for (int j = 1; j < DNA2.length(); ++j) {
-      ready[i][j] = ready_p[i][j].get_future();
+      if (i != 0)
+        ready[i][j] = ready_p[i][j].get_future();
     }
   }
 
@@ -150,8 +153,6 @@ int main(int argc, char *argv[]) {
   t2.join();
   t3.join();
   t4.join();
-
-  LS(DNA1, DNA2, 1, DNA2.length());
 
   string return_it;
   // Construct the LIS.
