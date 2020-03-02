@@ -67,7 +67,7 @@ string LS(string &DNA1, string &DNA2, int i, int n) {
     for (int j = 1; j <= DNA2.length(); j++) {
       if (j == 1) {
         ready[l-1][j].wait();
-        ready[l][j].wait();
+        ready[l][j-1].wait();
       }
       if (DNA1[l - 1] == DNA2[j - 1]) {
         if (LSQ[l - 1][j - 1] + 1 > max(LSQ[l - 1][j], LSQ[l][j - 1])) {
@@ -159,7 +159,7 @@ int main(int argc, char *argv[]) {
     ready_p[i].resize(DNA2.length());
     LSQ[i][0] = 0;
     from[i][0] = make_pair(-1, -1);
-    for (int j = 2; j <= DNA2.length() + 1; ++j) {
+    for (int j = 2; j < DNA2.length() + 1; ++j) {
       ready[i][j] = ready_p[i][j].get_future();
     }
   }
