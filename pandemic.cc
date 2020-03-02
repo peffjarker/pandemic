@@ -50,19 +50,18 @@ string read_string(istream &in) {
 //
 //
 
-string LS(string &DNA1, string &DNA2) {
+string LS(string &DNA1, string &DNA2, int i, int n) {
 
   cout << "DNA1 Length = " << DNA1.length() << endl;
   cout << "DNA2 Length = " << DNA2.length() << endl;
 
 
-  //int start = max(1, (i * (int)DNA2.length() / n));
-  //int end = min(((i + 1) * DNA2.length()) / n, DNA2.length());
+  int start = max(1, (i * (int)DNA2.length() / n));
+  int end = min(((i + 1) * DNA2.length()) / n, DNA2.length());
 
 
   for (int l = 1; l <= DNA1.length(); l++) {
-    #pragma omp parallel for schedule(static, 1)
-    for (int j = 1; j <= DNA2.length(); j++) {
+    for (int j = start; j <= end; j++) {
       if (l != 1) {
         bool go = ready[l-1][j-1].get() && ready[l-1][j].get() && ready[l][j-1].get();
       }
@@ -90,7 +89,6 @@ string LS(string &DNA1, string &DNA2) {
       }
       ready_p[l][j].set_value(true);
     }
-
   }
 
   string return_it;
@@ -157,7 +155,8 @@ int main(int argc, char *argv[]) {
     ready[i].resize(DNA2.length());
     ready_p[i].resize(DNA2.length());
     for (int j = 1; j < DNA2.length(); ++j) {
-      ready[i][j] = ready_p[i][j].get_future();
+      if (i > 1 && j > 1)
+        ready[i][j] = ready_p[i][j].get_future();
     }
   }
 
