@@ -55,10 +55,9 @@ void LS(string &DNA1, string &DNA2, int i, int n) {
   int start = max(1, (i * (int)DNA2.length() / n));
   int end = min(((i + 1) * DNA2.length()) / n, DNA2.length());
 
+
   for (int l = 1; i <= DNA1.length(); i++) {
-    if (i != 0) {
-      bool go = ready[i-1][l].get();
-    }
+    #pragma omp parallel for schedule(static)
     for (int j = start; j <= end; j++) {
       if (DNA1[l - 1] == DNA2[j - 1]) {
         if (LSQ[l - 1][j - 1] + 1 > max(LSQ[i - 1][j], LSQ[l][j - 1])) {
@@ -81,9 +80,6 @@ void LS(string &DNA1, string &DNA2, int i, int n) {
           LSQ[l][j] = LSQ[l][j - 1];
           from[l][j] = make_pair(l, j - 1);
         }
-      }
-      if (i < n - 1) {
-        ready_p[i][l].set_value(true);
       }
     }
 
@@ -130,14 +126,13 @@ int main(int argc, char *argv[]) {
     from[i][0] = make_pair(-1, -1);
   }
 
-  ready.resize(3);
-  ready_p.resize(3);
-  for (int i = 0; i < 3; ++i) {
+  ready.resize(DNA1.length());
+  ready_p.resize(DNA1.length());
+  for (int i = 1; i < DNA1.length(); ++i) {
     ready[i].resize(DNA2.length());
     ready_p[i].resize(DNA2.length());
     for (int j = 1; j < DNA2.length(); ++j) {
-      if (i != 0)
-        ready[i][j] = ready_p[i][j].get_future();
+      ready[i][j] = ready_p[i][j].get_future();
     }
   }
 
