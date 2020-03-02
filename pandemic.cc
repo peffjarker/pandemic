@@ -149,6 +149,8 @@ int main(int argc, char *argv[]) {
   t3.join();
   t4.join();*/
 
+  LS(DNA1, DNA2, 0, 4);
+
   string return_it;
   // Construct the LIS.
   int l1 = DNA1.length();
