@@ -21,8 +21,8 @@ using namespace std;
 
 vector<vector<int>> LSQ;
 vector<vector<pair<int, int>>> from;
-vector<vector<future<bool>>> ready;
-vector<vector<promise<bool>>> ready_p;
+vector<vector<future<int>>> ready;
+vector<vector<promise<int>>> ready_p;
 
 string read_string(istream &in) {
   string temp;
@@ -61,36 +61,42 @@ void LS(string &DNA1, string &DNA2, int i, int n) {
 
 
   for (int l = 1; l <= DNA1.length(); l++) {
+    if (l != 1) {
+      int back = ready[l-1][1].get();
+    }
     for (int j = start; j <= end; j++) {
       if (l != 1) {
-        bool go = ready[l-1][j-1].get() && ready[l-1][j].get() && ready[l][j-1].get();
+        int diag = ready[l-1][j-1].get();
       }
       if (DNA1[l - 1] == DNA2[j - 1]) {
         if (LSQ[l - 1][j - 1] + 1 > max(LSQ[l - 1][j], LSQ[l][j - 1])) {
+          ready_p[l][j.set_value(LSQ[l - 1][j - 1] + 1);
           LSQ[l][j] = LSQ[l - 1][j - 1] + 1;
           from[l][j] = make_pair(l - 1, j - 1);
         } else {
           if (LSQ[l - 1][j] > LSQ[l][j - 1]) {
+            ready_p[l][j].set_value(LSQ[l - 1][j]);
             LSQ[l][j] = LSQ[l - 1][j];
             from[l][j] = make_pair(l - 1, j);
           } else {
+            ready_p[l][j].set_value(LSQ[l][j-1]);
             LSQ[l][j] = LSQ[l][j - 1];
             from[l][j] = make_pair(l, j - 1);
           }
         }
       } else {
         if (LSQ[l - 1][j] > LSQ[l][j - 1]) {
+          ready_p[l][j].set_value(LSQ[l - 1][j]);
           LSQ[l][j] = LSQ[l - 1][j];
           from[l][j] = make_pair(l - 1, j);
         } else {
+          ready_p[l][j].set_value(LSQ[l][j-1]);
           LSQ[l][j] = LSQ[l][j - 1];
           from[l][j] = make_pair(l, j - 1);
         }
       }
-      ready_p[l][j].set_value(true);
     }
   }
-
 }
 
 
@@ -123,6 +129,7 @@ int main(int argc, char *argv[]) {
   ready_p.resize(DNA1.length());
   for (int i = 0; i < DNA1.length() + 1; i++) {
     ready[i].resize(DNA2.length() + 1);
+    ready_p[i].resize(DNA2.length());
     LSQ[i].resize(DNA2.length() + 1, 0);
     from[i].resize(DNA2.length() + 1);
   }
@@ -133,11 +140,6 @@ int main(int argc, char *argv[]) {
   for (int i = 1; i < DNA1.length() + 1; i++) {
     LSQ[i][0] = 0;
     from[i][0] = make_pair(-1, -1);
-    ready[i].resize(DNA2.length());
-    ready_p[i].resize(DNA2.length());
-    for (int j = 2; j < DNA2.length(); ++j) {
-      ready[i][j] = ready_p[i][j].get_future();
-    }
   }
 
   thread t1(LS, ref(DNA1), ref(DNA2), 0, 4);
