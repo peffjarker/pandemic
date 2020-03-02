@@ -167,7 +167,7 @@ int main(int argc, char *argv[]) {
   t3.join();
   t4.join();
   string LS1;
-  LS1 = LS(DNA1, DNA2);
+
 
 
 
