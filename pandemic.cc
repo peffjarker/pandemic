@@ -156,7 +156,7 @@ int main(int argc, char *argv[]) {
   ready_p.resize(DNA1.length());
   for (int i = 1; i < DNA1.length() + 1; i++) {
     ready[i].resize(DNA2.length() + 1);
-    ready_p[i].resize(DNA2.length());
+    ready_p[i].resize(DNA2.length() + 1);
     LSQ[i][0] = 0;
     from[i][0] = make_pair(-1, -1);
     for (int j = 2; j < DNA2.length() + 1; ++j) {
