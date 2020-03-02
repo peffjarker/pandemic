@@ -52,31 +52,6 @@ string read_string(istream &in) {
 
 string LS(string &DNA1, string &DNA2) {
 
-  LSQ.resize(DNA1.length() + 1);
-  from.resize(DNA1.length() + 1);
-  for (int i = 0; i < DNA1.length() + 1; i++) {
-    LSQ[i].resize(DNA2.length() + 1, 0);
-    from[i].resize(DNA2.length() + 1);
-  }
-  for (int i = 0; i < DNA2.length() + 1; i++) {
-    LSQ[0][i] = 0;
-    from[0][i] = make_pair(-1, -1);
-  }
-  for (int i = 1; i < DNA1.length() + 1; i++) {
-    LSQ[i][0] = 0;
-    from[i][0] = make_pair(-1, -1);
-  }
-
-  ready.resize(DNA1.length());
-  ready_p.resize(DNA1.length());
-  for (int i = 1; i < DNA1.length(); ++i) {
-    ready[i].resize(DNA2.length());
-    ready_p[i].resize(DNA2.length());
-    for (int j = 1; j < DNA2.length(); ++j) {
-      ready[i][j] = ready_p[i][j].get_future();
-    }
-  }
-
   cout << "DNA1 Length = " << DNA1.length() << endl;
   cout << "DNA2 Length = " << DNA2.length() << endl;
 
@@ -90,7 +65,6 @@ string LS(string &DNA1, string &DNA2) {
     for (int j = 1; j <= DNA2.length(); j++) {
       if (l != 1) {
         bool go = ready[l-1][j-1].get() && ready[l-1][j].get() && ready[l][j-1].get();
-        cout << go << endl;
       }
       if (DNA1[l - 1] == DNA2[j - 1]) {
         if (LSQ[l - 1][j - 1] + 1 > max(LSQ[l - 1][j], LSQ[l][j - 1])) {
@@ -161,6 +135,32 @@ int main(int argc, char *argv[]) {
   string DNA2;
   DNA2 = read_string(in2);
   // cout << DNA2 << endl;
+
+  LSQ.resize(DNA1.length() + 1);
+  from.resize(DNA1.length() + 1);
+  for (int i = 0; i < DNA1.length() + 1; i++) {
+    LSQ[i].resize(DNA2.length() + 1, 0);
+    from[i].resize(DNA2.length() + 1);
+  }
+  for (int i = 0; i < DNA2.length() + 1; i++) {
+    LSQ[0][i] = 0;
+    from[0][i] = make_pair(-1, -1);
+  }
+  for (int i = 1; i < DNA1.length() + 1; i++) {
+    LSQ[i][0] = 0;
+    from[i][0] = make_pair(-1, -1);
+  }
+
+  ready.resize(DNA1.length());
+  ready_p.resize(DNA1.length());
+  for (int i = 1; i < DNA1.length(); ++i) {
+    ready[i].resize(DNA2.length());
+    ready_p[i].resize(DNA2.length());
+    for (int j = 1; j < DNA2.length(); ++j) {
+      ready[i][j] = ready_p[i][j].get_future();
+    }
+  }
+
 
   /*thread t1(LS, ref(DNA1), ref(DNA2), 0, 4);
   thread t2(LS, ref(DNA1), ref(DNA2), 1, 4);
