@@ -50,7 +50,7 @@ string read_string(istream &in) {
 //
 //
 
-void LS(string &DNA1, string &DNA2, int i, int n) {
+string LS(string &DNA1, string &DNA2, int i, int n) {
 
   cout << "DNA1 Length = " << DNA1.length() << endl;
   cout << "DNA2 Length = " << DNA2.length() << endl;
@@ -67,7 +67,7 @@ void LS(string &DNA1, string &DNA2, int i, int n) {
     for (int j = 1; j <= DNA2.length(); j++) {
       if (DNA1[l - 1] == DNA2[j - 1]) {
         if (LSQ[l - 1][j - 1] + 1 > max(LSQ[l - 1][j], LSQ[l][j - 1])) {
-          ready_p[l][j.set_value(LSQ[l - 1][j - 1] + 1);
+          ready_p[l][j].set_value(LSQ[l - 1][j - 1] + 1);
           LSQ[l][j] = LSQ[l - 1][j - 1] + 1;
           from[l][j] = make_pair(l - 1, j - 1);
         } else {
@@ -156,7 +156,7 @@ int main(int argc, char *argv[]) {
     from[i][0] = make_pair(-1, -1);
   }
 
-  string LS1 = ;
+  string LS1 = LS(DNA1, DNA2, 0, 1);
 
   cout << LS1 << endl;
   cout << "Similarity score 1 vs 2="
