@@ -60,26 +60,26 @@ void LS(string &DNA1, string &DNA2, int i, int n) {
       bool go = ready[i-1][l].get();
     }
     for (int j = start; j <= end; j++) {
-      if (DNA1[i - 1] == DNA2[j - 1]) {
-        if (LSQ[i - 1][j - 1] + 1 > max(LSQ[i - 1][j], LSQ[i][j - 1])) {
-          LSQ[i][j] = LSQ[i - 1][j - 1] + 1;
-          from[i][j] = make_pair(i - 1, j - 1);
+      if (DNA1[l - 1] == DNA2[j - 1]) {
+        if (LSQ[l - 1][j - 1] + 1 > max(LSQ[i - 1][j], LSQ[l][j - 1])) {
+          LSQ[l][j] = LSQ[l - 1][j - 1] + 1;
+          from[l][j] = make_pair(l - 1, j - 1);
         } else {
-          if (LSQ[i - 1][j] > LSQ[i][j - 1]) {
-            LSQ[i][j] = LSQ[i - 1][j];
-            from[i][j] = make_pair(i - 1, j);
+          if (LSQ[l - 1][j] > LSQ[l][j - 1]) {
+            LSQ[l][j] = LSQ[l - 1][j];
+            from[l][j] = make_pair(l - 1, j);
           } else {
-            LSQ[i][j] = LSQ[i][j - 1];
-            from[i][j] = make_pair(i, j - 1);
+            LSQ[l][j] = LSQ[l][j - 1];
+            from[l][j] = make_pair(l, j - 1);
           }
         }
       } else {
-        if (LSQ[i - 1][j] > LSQ[i][j - 1]) {
-          LSQ[i][j] = LSQ[i - 1][j];
-          from[i][j] = make_pair(i - 1, j);
+        if (LSQ[l - 1][j] > LSQ[l][j - 1]) {
+          LSQ[l][j] = LSQ[l - 1][j];
+          from[l][j] = make_pair(l - 1, j);
         } else {
-          LSQ[i][j] = LSQ[i][j - 1];
-          from[i][j] = make_pair(i, j - 1);
+          LSQ[l][j] = LSQ[l][j - 1];
+          from[l][j] = make_pair(l, j - 1);
         }
       }
       if (i < n - 1) {
