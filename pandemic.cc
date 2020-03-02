@@ -165,7 +165,6 @@ int main(int argc, char *argv[]) {
     l2 = t.second;
   }
   assert(LS1.length() == LSQ[DNA1.length()][DNA2.length()]);
-  return return_it;
 
 
   cout << LS1 << endl;
