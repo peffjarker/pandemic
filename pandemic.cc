@@ -52,13 +52,16 @@ string read_string(istream &in) {
 
 void LS(string &DNA1, string &DNA2, int i, int n) {
 
-  int start = max(1, (i * (int)DNA2.length() / n));
-  int end = min(((i + 1) * DNA2.length()) / n, DNA2.length());
+  //int start = max(1, (i * (int)DNA2.length() / n));
+  //int end = min(((i + 1) * DNA2.length()) / n, DNA2.length());
 
 
   for (int l = 1; i <= DNA1.length(); i++) {
     #pragma omp parallel for schedule(static)
     for (int j = 1; j <= DNA2.length(); j++) {
+      if (l != 1) {
+        bool go = ready[l-1][j-1].get() && ready[l-1][j].get() && ready[l][j-1].get();
+      }
       if (DNA1[l - 1] == DNA2[j - 1]) {
         if (LSQ[l - 1][j - 1] + 1 > max(LSQ[i - 1][j], LSQ[l][j - 1])) {
           LSQ[l][j] = LSQ[l - 1][j - 1] + 1;
@@ -81,6 +84,7 @@ void LS(string &DNA1, string &DNA2, int i, int n) {
           from[l][j] = make_pair(l, j - 1);
         }
       }
+      ready[l][j].set_value(true);
     }
 
   }
