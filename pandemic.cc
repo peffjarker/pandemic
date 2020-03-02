@@ -61,7 +61,7 @@ string LS(string &DNA1, string &DNA2) {
 
 
   for (int l = 1; l <= DNA1.length(); l++) {
-    #pragma omp parallel for schedule(static)
+    #pragma omp parallel for schedule(static, 1)
     for (int j = 1; j <= DNA2.length(); j++) {
       if (l != 1) {
         bool go = ready[l-1][j-1].get() && ready[l-1][j].get() && ready[l][j-1].get();
