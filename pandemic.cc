@@ -84,7 +84,7 @@ void LS(string &DNA1, string &DNA2, int i, int n) {
           from[l][j] = make_pair(l, j - 1);
         }
       }
-      ready[l][j].set_value(true);
+      ready_p[l][j].set_value(true);
     }
 
   }
