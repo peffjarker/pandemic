@@ -58,7 +58,7 @@ void LS(string &DNA1, string &DNA2, int i, int n) {
 
   for (int l = 1; i <= DNA1.length(); i++) {
     #pragma omp parallel for schedule(static)
-    for (int j = start; j <= end; j++) {
+    for (int j = 1; j <= DNA2.length(); j++) {
       if (DNA1[l - 1] == DNA2[j - 1]) {
         if (LSQ[l - 1][j - 1] + 1 > max(LSQ[i - 1][j], LSQ[l][j - 1])) {
           LSQ[l][j] = LSQ[l - 1][j - 1] + 1;
@@ -126,7 +126,7 @@ int main(int argc, char *argv[]) {
     from[i][0] = make_pair(-1, -1);
   }
 
-  ready.resize(DNA1.length());
+  /*ready.resize(DNA1.length());
   ready_p.resize(DNA1.length());
   for (int i = 1; i < DNA1.length(); ++i) {
     ready[i].resize(DNA2.length());
@@ -134,12 +134,12 @@ int main(int argc, char *argv[]) {
     for (int j = 1; j < DNA2.length(); ++j) {
       ready[i][j] = ready_p[i][j].get_future();
     }
-  }
+  }*/
 
   cout << "DNA1 Length = " << DNA1.length() << endl;
   cout << "DNA2 Length = " << DNA2.length() << endl;
 
-  thread t1(LS, ref(DNA1), ref(DNA2), 0, 4);
+  /*thread t1(LS, ref(DNA1), ref(DNA2), 0, 4);
   thread t2(LS, ref(DNA1), ref(DNA2), 1, 4);
   thread t3(LS, ref(DNA1), ref(DNA2), 2, 4);
   thread t4(LS, ref(DNA1), ref(DNA2), 3, 4);
@@ -147,7 +147,7 @@ int main(int argc, char *argv[]) {
   t1.join();
   t2.join();
   t3.join();
-  t4.join();
+  t4.join();*/
 
   string return_it;
   // Construct the LIS.
