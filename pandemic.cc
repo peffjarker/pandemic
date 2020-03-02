@@ -60,17 +60,14 @@ void LS(string &DNA1, string &DNA2, int i, int n) {
   int end = min(((i + 1) * DNA2.length()) / n, DNA2.length());
 
 
+  #pragma omp parallel
+  {
   for (int l = 1; l <= DNA1.length(); l++) {
-    if (l != 1) {
-      int back = ready[l-1][1].get();
-    }
-    for (int j = start; j <= end; j++) {
-      if (l != 1) {
-        int diag = ready[l-1][j-1].get();
-      }
+    #pragma omp parallel for schedule (static, 1)
+    for (int j = 1; j <= DNA2.length(); j++) {
       if (DNA1[l - 1] == DNA2[j - 1]) {
         if (LSQ[l - 1][j - 1] + 1 > max(LSQ[l - 1][j], LSQ[l][j - 1])) {
-          ready_p[l][j].set_value(LSQ[l - 1][j - 1] + 1);
+          ready_p[l][j.set_value(LSQ[l - 1][j - 1] + 1);
           LSQ[l][j] = LSQ[l - 1][j - 1] + 1;
           from[l][j] = make_pair(l - 1, j - 1);
         } else {
@@ -97,6 +94,23 @@ void LS(string &DNA1, string &DNA2, int i, int n) {
       }
     }
   }
+  }
+
+  string LS1;
+  int l1 = DNA1.length();
+  int l2 = DNA2.length();
+  while ((l1 != 0) && (l2 != 0)) {
+    pair<int, int> t;
+    t = from[l1][l2];
+    if ((t.first == l1 - 1) && (t.second == l2 - 1)) {
+      assert(DNA1[l1 - 1] == DNA2[l2 - 1]);
+      LS1.insert(0, 1, DNA1[l1 - 1]);
+    }
+    l1 = t.first;
+    l2 = t.second;
+  }
+  assert(LS1.length() == LSQ[DNA1.length()][DNA2.length()]);
+  return LS1;
 }
 
 
@@ -125,11 +139,11 @@ int main(int argc, char *argv[]) {
 
   LSQ.resize(DNA1.length() + 1);
   from.resize(DNA1.length() + 1);
-  ready.resize(DNA1.length());
-  ready_p.resize(DNA1.length());
+  //ready.resize(DNA1.length());
+  //ready_p.resize(DNA1.length());
   for (int i = 0; i < DNA1.length() + 1; i++) {
-    ready[i].resize(DNA2.length() + 1);
-    ready_p[i].resize(DNA2.length());
+    //ready[i].resize(DNA2.length() + 1);
+    //ready_p[i].resize(DNA2.length());
     LSQ[i].resize(DNA2.length() + 1, 0);
     from[i].resize(DNA2.length() + 1);
   }
@@ -142,32 +156,7 @@ int main(int argc, char *argv[]) {
     from[i][0] = make_pair(-1, -1);
   }
 
-  thread t1(LS, ref(DNA1), ref(DNA2), 0, 4);
-  thread t2(LS, ref(DNA1), ref(DNA2), 1, 4);
-  thread t3(LS, ref(DNA1), ref(DNA2), 2, 4);
-  thread t4(LS, ref(DNA1), ref(DNA2), 3, 4);
-
-  t1.join();
-  t2.join();
-  t3.join();
-  t4.join();
-
-  string LS1;
-
-  int l1 = DNA1.length();
-  int l2 = DNA2.length();
-  while ((l1 != 0) && (l2 != 0)) {
-    pair<int, int> t;
-    t = from[l1][l2];
-    if ((t.first == l1 - 1) && (t.second == l2 - 1)) {
-      assert(DNA1[l1 - 1] == DNA2[l2 - 1]);
-      LS1.insert(0, 1, DNA1[l1 - 1]);
-    }
-    l1 = t.first;
-    l2 = t.second;
-  }
-  assert(LS1.length() == LSQ[DNA1.length()][DNA2.length()]);
-
+  string LS1 = ;
 
   cout << LS1 << endl;
   cout << "Similarity score 1 vs 2="
