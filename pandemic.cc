@@ -161,7 +161,7 @@ int main(int argc, char *argv[]) {
   }
 
 
-  /*thread t1(LS, ref(DNA1), ref(DNA2), 0, 4);
+  thread t1(LS, ref(DNA1), ref(DNA2), 0, 4);
   thread t2(LS, ref(DNA1), ref(DNA2), 1, 4);
   thread t3(LS, ref(DNA1), ref(DNA2), 2, 4);
   thread t4(LS, ref(DNA1), ref(DNA2), 3, 4);
@@ -169,9 +169,8 @@ int main(int argc, char *argv[]) {
   t1.join();
   t2.join();
   t3.join();
-  t4.join();*/
+  t4.join();
   string LS1;
-  LS1 = LS(DNA1, DNA2);
 
 
 
