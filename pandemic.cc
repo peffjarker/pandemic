@@ -22,8 +22,8 @@ using namespace std;
 string LSs;
 vector<vector<int>> LSQ;
 vector<vector<pair<int, int>>> from;
-vector<vector<future<int>>> ready;
-vector<vector<promise<int>>> ready_p;
+vector<vector<future<bool>>> ready;
+vector<vector<promise<bool>>> ready_p;
 
 string read_string(istream &in) {
   string temp;
@@ -60,11 +60,10 @@ string LS(string &DNA1, string &DNA2, int i, int n) {
   int end = min(((i + 1) * DNA2.length()) / n, DNA2.length());
 
   for (int l = 1; l <= DNA1.length(); l++) {
+    if (i != 0) {
+      bool go = ready[i - 1][l].get();
+    }
     for (int j = start; j <= end; j++) {
-      if (j == 1) {
-        ready[l - 1][j].wait();
-        ready[l][j - 1].wait();
-      }
       if (DNA1[l - 1] == DNA2[j - 1]) {
         if (LSQ[l - 1][j - 1] + 1 > max(LSQ[l - 1][j], LSQ[l][j - 1])) {
           LSQ[l][j] = LSQ[l - 1][j - 1] + 1;
@@ -88,6 +87,7 @@ string LS(string &DNA1, string &DNA2, int i, int n) {
         }
       }
     }
+    ready_p[i][l].set_value(true);
   }
 
   string LS1;
@@ -143,6 +143,15 @@ int main(int argc, char *argv[]) {
   for (int i = 1; i < DNA1.length() + 1; i++) {
     LSQ[i][0] = 0;
     from[i][0] = make_pair(-1, -1);
+  }
+  ready.resize(3);
+  ready_p.resize(3);
+  for (int i = 0; i < 3; i++) {
+    ready[i].resize(DNA1.length() + 1);
+    ready_p[i].resize(DNA1.length() + 1);
+    for (int j = 1; j < DNA1.length() + 1; j++) {
+      ready[i][j] = ready_p[i][j].get_future();
+    }
   }
 
   thread t1(LS, ref(DNA1), ref(DNA2), 0, 4);
