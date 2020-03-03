@@ -1,10 +1,10 @@
 //
 // Pandemic.cc
 //
-// Author: David W. Juedes
+// Author: David W. Juedes parallelized by Jeff Parker
 // Purpose: Compares two DNA sequences using a dynamic programming
 // algorithm.    Finds the longest identical subsequence between two
-// sequences.
+// sequences using a parallelized algorithm.
 //
 
 #include <algorithm>
@@ -12,12 +12,14 @@
 #include <fstream>
 #include <future>
 #include <iostream>
+#include <omp.h>
 #include <sstream>
 #include <thread>
 #include <vector>
 
 using namespace std;
 
+// Global variables
 string LSs;
 vector<vector<int>> LSQ;
 vector<vector<pair<int, int>>> from;
@@ -47,7 +49,7 @@ string read_string(istream &in) {
 }
 
 // Compute the longest identical subsequence between DNA1 and DNA2
-//
+// in parallel fashion using future & promises to halt program operation.
 //
 
 string LS(string &DNA1, string &DNA2, int i, int n) {
@@ -112,20 +114,25 @@ int main(int argc, char *argv[]) {
   DNA2 = read_string(in2);
   // cout << DNA2 << endl;
 
+  // Sets up tables for dynamic programming solution
   LSQ.resize(DNA1.length() + 1);
   from.resize(DNA1.length() + 1);
+#pragma omp parallel for schedule(static, 5000)
   for (int i = 0; i < DNA1.length() + 1; i++) {
     LSQ[i].resize(DNA2.length() + 1, 0);
     from[i].resize(DNA2.length() + 1);
   }
+#pragma omp parallel for schedule(static, 5000)
   for (int i = 0; i < DNA2.length() + 1; i++) {
     LSQ[0][i] = 0;
     from[0][i] = make_pair(-1, -1);
   }
+#pragma omp parallel for schedule(static, 5000)
   for (int i = 1; i < DNA1.length() + 1; i++) {
     LSQ[i][0] = 0;
     from[i][0] = make_pair(-1, -1);
   }
+  // Sets up future & promises for pipeline
   ready.resize(3);
   ready_p.resize(3);
   for (int i = 0; i < 3; i++) {
@@ -139,11 +146,13 @@ int main(int argc, char *argv[]) {
   cout << "DNA1 Length = " << DNA1.length() << endl;
   cout << "DNA2 Length = " << DNA2.length() << endl;
 
+  // 4 threads compute main longest common string operations
   thread t1(LS, ref(DNA1), ref(DNA2), 0, 4);
   thread t2(LS, ref(DNA1), ref(DNA2), 1, 4);
   thread t3(LS, ref(DNA1), ref(DNA2), 2, 4);
   thread t4(LS, ref(DNA1), ref(DNA2), 3, 4);
 
+  // Blocks until each thread is finished
   t1.join();
   t2.join();
   t3.join();
