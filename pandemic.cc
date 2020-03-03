@@ -15,6 +15,7 @@
 #include <future>
 #include <omp.h>
 #include <sstream>
+#include <thread>
 #include <vector>
 
 using namespace std;
