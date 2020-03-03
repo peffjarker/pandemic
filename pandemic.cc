@@ -144,6 +144,11 @@ int main(int argc, char *argv[]) {
   thread t3(LS, ref(DNA1), ref(DNA2), 2, 4);
   thread t4(LS, ref(DNA1), ref(DNA2), 3, 4);
 
+  t1.join();
+  t2.join();
+  t3.join();
+  t4.join();
+  
     string LS1;
   int l1 = DNA1.length();
   int l2 = DNA2.length();
