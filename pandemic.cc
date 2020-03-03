@@ -56,7 +56,7 @@ string LS(string &DNA1, string &DNA2, int i, int n) {
   cout << "DNA1 Length = " << DNA1.length() << endl;
   cout << "DNA2 Length = " << DNA2.length() << endl;
 
-  int start = max(1, (i * (int)DNA2.length() / n));
+  int start = max(1, (i * DNA2.length() / n));
   int end = min(((i + 1) * DNA2.length()) / n, DNA2.length());
 
   for (int l = 1; l <= DNA1.length(); l++) {
@@ -150,9 +150,9 @@ int main(int argc, char *argv[]) {
   thread t3(ref(DNA1), ref(DNA2), 2, 4);
   thread t4(ref(DNA1), ref(DNA2), 3, 4);
 
-  cout << LS1 << endl;
-  cout << "Similarity score 1 vs 2=" << LS1.length() / (DNA1.length() * 1.0)
+  cout << LS << endl;
+  cout << "Similarity score 1 vs 2=" << LS.length() / (DNA1.length() * 1.0)
        << endl;
-  cout << "Similarity score 2 vs 1=" << LS1.length() / (DNA2.length() * 1.0)
+  cout << "Similarity score 2 vs 1=" << LS.length() / (DNA2.length() * 1.0)
        << endl;
 }
