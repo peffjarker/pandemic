@@ -1,10 +1,21 @@
+/*
+Jeff Parker
+CS4000 HW4
+This program altered the original pandemic program by Dr. Juedes which
+calculates the longest common substring between 2 strings. This was altered
+to include a pipelined performance boost of around ~3.6
+
+This program used omp & c++ threads, compile with:
+  g++ parker_pandemic.cc -pthread -fopenmp
+*/
+
 //
 // Pandemic.cc
 //
-// Author: David W. Juedes parallelized by Jeff Parker
+// Author: David W. Juedes
 // Purpose: Compares two DNA sequences using a dynamic programming
 // algorithm.    Finds the longest identical subsequence between two
-// sequences using a parallelized algorithm.
+// sequences
 //
 
 #include <algorithm>
@@ -58,9 +69,11 @@ string LS(string &DNA1, string &DNA2, int i, int n) {
   int end = min(((i + 1) * DNA2.length()) / n, DNA2.length());
 
   for (int l = 1; l <= DNA1.length(); l++) {
+    // Waits til previous thread says its ready
     if (i != 0) {
       bool go = ready[i - 1][l].get();
     }
+    // performs main computations
     for (int j = start; j <= end; j++) {
       if (DNA1[l - 1] == DNA2[j - 1]) {
         if (LSQ[l - 1][j - 1] + 1 > max(LSQ[l - 1][j], LSQ[l][j - 1])) {
@@ -85,6 +98,7 @@ string LS(string &DNA1, string &DNA2, int i, int n) {
         }
       }
     }
+    // readys next thread
     if (i < n - 1) {
       ready_p[i][l].set_value(true);
     }
