@@ -12,7 +12,6 @@
 #include <fstream>
 #include <future>
 #include <iostream>
-#include <omp.h>
 #include <sstream>
 #include <thread>
 #include <vector>
