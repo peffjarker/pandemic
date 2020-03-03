@@ -89,22 +89,6 @@ string LS(string &DNA1, string &DNA2, int i, int n) {
     }
     ready_p[i][l].set_value(true);
   }
-
-  string LS1;
-  int l1 = DNA1.length();
-  int l2 = DNA2.length();
-  while ((l1 != 0) && (l2 != 0)) {
-    pair<int, int> t;
-    t = from[l1][l2];
-    if ((t.first == l1 - 1) && (t.second == l2 - 1)) {
-      assert(DNA1[l1 - 1] == DNA2[l2 - 1]);
-      LS1.insert(0, 1, DNA1[l1 - 1]);
-    }
-    l1 = t.first;
-    l2 = t.second;
-  }
-
-  LSs += LS1;
 }
 
 int main(int argc, char *argv[]) {
@@ -159,6 +143,22 @@ int main(int argc, char *argv[]) {
   thread t3(LS, ref(DNA1), ref(DNA2), 2, 4);
   thread t4(LS, ref(DNA1), ref(DNA2), 3, 4);
 
+    string LS1;
+  int l1 = DNA1.length();
+  int l2 = DNA2.length();
+  while ((l1 != 0) && (l2 != 0)) {
+    pair<int, int> t;
+    t = from[l1][l2];
+    if ((t.first == l1 - 1) && (t.second == l2 - 1)) {
+      assert(DNA1[l1 - 1] == DNA2[l2 - 1]);
+      LS1.insert(0, 1, DNA1[l1 - 1]);
+    }
+    l1 = t.first;
+    l2 = t.second;
+  }
+
+  LSs += LS1;
+  
   cout << LSs << endl;
   cout << "Similarity score 1 vs 2=" << LSs.length() / (DNA1.length() * 1.0)
        << endl;
