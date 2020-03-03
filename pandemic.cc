@@ -145,10 +145,10 @@ int main(int argc, char *argv[]) {
     from[i][0] = make_pair(-1, -1);
   }
 
-  thread t1(DNA1, DNA2, 0, 4);
-  thread t2(DNA1, DNA2, 1, 4);
-  thread t3(DNA1, DNA2, 2, 4);
-  thread t4(DNA1, DNA2, 3, 4);
+  thread t1(ref(DNA1), ref(DNA2), 0, 4);
+  thread t2(ref(DNA1), ref(DNA2), 1, 4);
+  thread t3(ref(DNA1), ref(DNA2), 2, 4);
+  thread t4(ref(DNA1), ref(DNA2), 3, 4);
 
   cout << LS1 << endl;
   cout << "Similarity score 1 vs 2=" << LS1.length() / (DNA1.length() * 1.0)
