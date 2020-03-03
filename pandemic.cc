@@ -19,7 +19,7 @@
 
 using namespace std;
 
-string LS;
+string LSs;
 vector<vector<int>> LSQ;
 vector<vector<pair<int, int>>> from;
 vector<vector<future<int>>> ready;
@@ -104,7 +104,7 @@ string LS(string &DNA1, string &DNA2, int i, int n) {
     l2 = t.second;
   }
 
-  LS += LS1;
+  LSs += LS1;
 }
 
 int main(int argc, char *argv[]) {
@@ -150,9 +150,9 @@ int main(int argc, char *argv[]) {
   thread t3(ref(DNA1), ref(DNA2), 2, 4);
   thread t4(ref(DNA1), ref(DNA2), 3, 4);
 
-  cout << LS << endl;
-  cout << "Similarity score 1 vs 2=" << LS.length() / (DNA1.length() * 1.0)
+  cout << LSs << endl;
+  cout << "Similarity score 1 vs 2=" << LSs.length() / (DNA1.length() * 1.0)
        << endl;
-  cout << "Similarity score 2 vs 1=" << LS.length() / (DNA2.length() * 1.0)
+  cout << "Similarity score 2 vs 1=" << LSs.length() / (DNA2.length() * 1.0)
        << endl;
 }
