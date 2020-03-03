@@ -53,8 +53,6 @@ string read_string(istream &in) {
 
 string LS(string &DNA1, string &DNA2, int i, int n) {
 
-  cout << "DNA1 Length = " << DNA1.length() << endl;
-  cout << "DNA2 Length = " << DNA2.length() << endl;
 
   int start = max(1, (i * (int)DNA2.length() / n));
   int end = min(((i + 1) * DNA2.length()) / n, DNA2.length());
@@ -137,6 +135,9 @@ int main(int argc, char *argv[]) {
       ready[i][j] = ready_p[i][j].get_future();
     }
   }
+  
+    cout << "DNA1 Length = " << DNA1.length() << endl;
+  cout << "DNA2 Length = " << DNA2.length() << endl;
 
   thread t1(LS, ref(DNA1), ref(DNA2), 0, 4);
   thread t2(LS, ref(DNA1), ref(DNA2), 1, 4);
