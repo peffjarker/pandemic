@@ -53,7 +53,6 @@ string read_string(istream &in) {
 
 string LS(string &DNA1, string &DNA2, int i, int n) {
 
-
   int start = max(1, (i * (int)DNA2.length() / n));
   int end = min(((i + 1) * DNA2.length()) / n, DNA2.length());
 
@@ -85,7 +84,9 @@ string LS(string &DNA1, string &DNA2, int i, int n) {
         }
       }
     }
-    ready_p[i][l].set_value(true);
+    if (i < n - 1) {
+      ready_p[i][l].set_value(true);
+    }
   }
 }
 
@@ -135,8 +136,8 @@ int main(int argc, char *argv[]) {
       ready[i][j] = ready_p[i][j].get_future();
     }
   }
-  
-    cout << "DNA1 Length = " << DNA1.length() << endl;
+
+  cout << "DNA1 Length = " << DNA1.length() << endl;
   cout << "DNA2 Length = " << DNA2.length() << endl;
 
   thread t1(LS, ref(DNA1), ref(DNA2), 0, 4);
@@ -148,8 +149,8 @@ int main(int argc, char *argv[]) {
   t2.join();
   t3.join();
   t4.join();
-  
-    string LS1;
+
+  string LS1;
   int l1 = DNA1.length();
   int l2 = DNA2.length();
   while ((l1 != 0) && (l2 != 0)) {
@@ -164,7 +165,7 @@ int main(int argc, char *argv[]) {
   }
 
   LSs += LS1;
-  
+
   cout << LSs << endl;
   cout << "Similarity score 1 vs 2=" << LSs.length() / (DNA1.length() * 1.0)
        << endl;
